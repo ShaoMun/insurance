@@ -1,0 +1,187 @@
+
+  /* Upload page styles */
+  .container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, rgba(28, 137, 253, 0.1), rgba(0, 0, 0, 0.9));
+  }
+  
+  .upload-box {
+    width: 100%;
+    max-width: 600px;
+    background: rgba(28, 137, 253, 0.05);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid rgba(28, 137, 253, 0.3);
+    box-shadow: 
+      0 0 30px rgba(28, 137, 253, 0.2),
+      inset 0 0 20px rgba(28, 137, 253, 0.1);
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  .title {
+    color: #1c89fd;
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 20px rgba(28, 137, 253, 0.5);
+  }
+  
+  .dropzone {
+    border: 2px dashed rgba(28, 137, 253, 0.3);
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    background: rgba(28, 137, 253, 0.05);
+  }
+  
+  .dropzone:hover {
+    border-color: #1c89fd;
+    background: rgba(28, 137, 253, 0.1);
+  }
+  
+  .dragging {
+    border-color: #1c89fd;
+    background: rgba(28, 137, 253, 0.15);
+    transform: scale(1.02);
+  }
+  
+  .upload-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1rem;
+    background: linear-gradient(135deg, #1c89fd, #93c2ff);
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 16.5l-6-6h4v-6h4v6h4l-6 6zm-9 4.5h18v-2h-18v2z'/%3E%3C/svg%3E") center/contain no-repeat;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 16.5l-6-6h4v-6h4v6h4l-6 6zm-9 4.5h18v-2h-18v2z'/%3E%3C/svg%3E") center/contain no-repeat;
+  }
+  
+  .upload-text {
+    color: #93c2ff;
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+  
+  .file-list {
+    margin-top: 2rem;
+    background: rgba(28, 137, 253, 0.08);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+  
+  .file-list-title {
+    color: #93c2ff;
+    margin-bottom: 1rem;
+  }
+  
+  .file-item {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem;
+    background: rgba(28, 137, 253, 0.1);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  .file-name {
+    flex: 1;
+    color: #ffffff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .file-size {
+    color: #93c2ff;
+    margin: 0 1rem;
+  }
+  
+  .remove-button {
+    background: transparent;
+    border: none;
+    color: #ff453a;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.2rem 0.5rem;
+    transition: all 0.3s ease;
+  }
+  
+  .remove-button:hover {
+    color: #ff6b5c;
+    transform: scale(1.2);
+  }
+  
+  .upload-button {
+    width: 100%;
+    padding: 1rem;
+    margin-top: 2rem;
+    background: linear-gradient(135deg, #1c89fd, #0d47a1);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(28, 137, 253, 0.5);
+    box-shadow: 
+      0 0 20px rgba(28, 137, 253, 0.2),
+      inset 0 0 10px rgba(28, 137, 253, 0.1);
+  }
+  
+  .upload-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, #2196ff, #1565c0);
+    box-shadow: 
+      0 0 30px rgba(28, 137, 253, 0.3),
+      inset 0 0 15px rgba(28, 137, 253, 0.2);
+  }
+  
+  .upload-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .upload-box {
+      margin: 1rem;
+      padding: 1.5rem;
+    }
+    
+    .title {
+      font-size: 1.5rem;
+    }
+    
+    .dropzone {
+      padding: 2rem 1rem;
+    }
+  }
