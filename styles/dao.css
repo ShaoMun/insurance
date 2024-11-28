@@ -1,0 +1,521 @@
+.dao-container {
+    background: #000000;
+    min-height: 100vh;
+    padding: 2rem;
+    color: #ffffff;
+    margin-top: 70px;
+}
+
+/* DAO Header Stats */
+.dao-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.user-dao-stats,
+.pool-dao-stats {
+    background: linear-gradient(145deg, rgba(28, 137, 253, 0.1), rgba(0, 0, 0, 0.4));
+    border: 1px solid rgba(28, 137, 253, 0.3);
+    border-radius: 24px;
+    padding: 1.8rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    box-shadow: 
+        0 0 20px rgba(28, 137, 253, 0.2),
+        0 0 40px rgba(28, 137, 253, 0.1),
+        inset 0 0 20px rgba(28, 137, 253, 0.1);
+    position: relative;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.stat-item label {
+    color: #93c2ff;
+    font-size: 0.9rem;
+}
+
+.stat-item value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1c89fd;
+    text-shadow: 0 0 20px rgba(28, 137, 253, 0.5);
+}
+
+/* Tab Navigation - Similar to Dashboard */
+.dao-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    background: rgba(28, 137, 253, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(28, 137, 253, 0.2);
+    box-shadow: 
+        0 0 20px rgba(28, 137, 253, 0.1),
+        inset 0 0 20px rgba(28, 137, 253, 0.05);
+}
+
+.tab-btn {
+    background: transparent;
+    border: none;
+    color: #93c2ff;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1rem;
+    flex: 1;
+}
+
+.tab-btn:hover {
+    color: #ffffff;
+}
+
+.tab-btn.active {
+    background: linear-gradient(
+        135deg,
+        rgba(28, 137, 253, 0.2),
+        rgba(28, 137, 253, 0.1)
+    );
+    color: #ffffff;
+    box-shadow: 
+        0 0 20px rgba(28, 137, 253, 0.2),
+        inset 0 0 10px rgba(28, 137, 253, 0.1);
+}
+
+/* Proposal Cards */
+.proposal-card {
+    background: linear-gradient(145deg, rgba(28, 137, 253, 0.1), rgba(0, 0, 0, 0.4));
+    border: 1px solid rgba(28, 137, 253, 0.3);
+    border-radius: 24px;
+    padding: 1.8rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 
+        0 0 20px rgba(28, 137, 253, 0.2),
+        inset 0 0 20px rgba(28, 137, 253, 0.1);
+    transition: all 0.3s ease;
+}
+
+.proposal-card:hover {
+    border-color: rgba(28, 137, 253, 0.6);
+    transform: translateY(-3px);
+    box-shadow: 
+        0 0 30px rgba(28, 137, 253, 0.3),
+        inset 0 0 30px rgba(28, 137, 253, 0.15);
+}
+
+/* Voting Buttons */
+.vote-yes-btn,
+.vote-no-btn {
+    flex: 1;
+    padding: 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    border: 1px solid;
+}
+
+.vote-yes-btn {
+    background: rgba(0, 255, 157, 0.1);
+    color: #00ff9d;
+    border-color: rgba(0, 255, 157, 0.3);
+    box-shadow: 
+        0 0 20px rgba(0, 255, 157, 0.15),
+        inset 0 0 10px rgba(0, 255, 157, 0.05);
+}
+
+.vote-no-btn {
+    background: rgba(255, 69, 58, 0.1);
+    color: #ff453a;
+    border-color: rgba(255, 69, 58, 0.3);
+    box-shadow: 
+        0 0 20px rgba(255, 69, 58, 0.15),
+        inset 0 0 10px rgba(255, 69, 58, 0.05);
+}
+
+/* Progress Bars */
+.progress-bar {
+  height: 6px;
+  background: rgba(28, 137, 253, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  display: flex;
+  margin: 1rem 0;
+}
+
+.yes-votes {
+  height: 100%;
+  background: linear-gradient(90deg, #00ff9d, #00ff9d80);
+  box-shadow: 0 0 10px rgba(0, 255, 157, 0.3);
+  transition: width 0.6s ease-out;
+}
+
+.no-votes {
+  height: 100%;
+  background: linear-gradient(90deg, #ff453a, #ff453a80);
+  box-shadow: 0 0 10px rgba(255, 69, 58, 0.3);
+  transition: width 0.6s ease-out;
+}
+
+/* Claim Review Cards */
+.claim-review-card {
+  background: linear-gradient(145deg, rgba(28, 137, 253, 0.1), rgba(0, 0, 0, 0.4));
+  border: 1px solid rgba(28, 137, 253, 0.3);
+  border-radius: 24px;
+  padding: 1.8rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 
+    0 0 20px rgba(28, 137, 253, 0.2),
+    inset 0 0 20px rgba(28, 137, 253, 0.1);
+  transition: all 0.3s ease;
+}
+
+.claim-review-card:hover {
+  border-color: rgba(28, 137, 253, 0.6);
+  transform: translateY(-3px);
+  box-shadow: 
+    0 0 30px rgba(28, 137, 253, 0.3),
+    inset 0 0 30px rgba(28, 137, 253, 0.15);
+}
+
+/* AI Confidence Bar */
+.ai-assessment {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  background: rgba(28, 137, 253, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(28, 137, 253, 0.2);
+}
+
+.confidence-bar {
+  height: 6px;
+  background: rgba(28, 137, 253, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 0.8rem 0;
+}
+
+.confidence-fill {
+  height: 100%;
+  transition: width 0.6s ease-out;
+  box-shadow: 0 0 10px rgba(0, 255, 157, 0.3);
+}
+
+/* Activity Feed */
+.activity-feed {
+  display: grid;
+  gap: 1rem;
+}
+
+.activity-item {
+  background: linear-gradient(145deg, rgba(28, 137, 253, 0.1), rgba(0, 0, 0, 0.4));
+  border: 1px solid rgba(28, 137, 253, 0.3);
+  border-radius: 16px;
+  padding: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 0 15px rgba(28, 137, 253, 0.15),
+    inset 0 0 10px rgba(28, 137, 253, 0.1);
+}
+
+.activity-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+  background: rgba(28, 137, 253, 0.1);
+  border: 1px solid rgba(28, 137, 253, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 0 10px rgba(28, 137, 253, 0.2),
+    inset 0 0 5px rgba(28, 137, 253, 0.1);
+}
+
+/* Create Proposal Button */
+.create-proposal-btn {
+  background: linear-gradient(135deg, #1c89fd, #93c2ff);
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  box-shadow: 0 0 20px rgba(28, 137, 253, 0.2);
+}
+
+.create-proposal-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 30px rgba(28, 137, 253, 0.3);
+}
+
+/* View Evidence Button */
+.view-evidence-btn {
+  background: rgba(28, 137, 253, 0.1);
+  border: 1px solid rgba(28, 137, 253, 0.3);
+  color: #93c2ff;
+  padding: 1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 0 15px rgba(28, 137, 253, 0.15),
+    inset 0 0 10px rgba(28, 137, 253, 0.1);
+}
+
+.view-evidence-btn:hover {
+  background: rgba(28, 137, 253, 0.2);
+  border-color: rgba(28, 137, 253, 0.5);
+  color: #ffffff;
+  box-shadow: 
+    0 0 20px rgba(28, 137, 253, 0.25),
+    inset 0 0 15px rgba(28, 137, 253, 0.15);
+}
+
+/* Section Headers */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.section-header h2 {
+  font-size: 1.8rem;
+  color: #ffffff;
+  text-shadow: 0 0 20px rgba(28, 137, 253, 0.3);
+}
+
+/* Responsive Design Updates */
+@media (max-width: 1200px) {
+  .dao-header {
+    grid-template-columns: 1fr;
+  }
+  
+  .user-dao-stats,
+  .pool-dao-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .dao-container {
+    padding: 1rem;
+  }
+  
+  .dao-tabs {
+    flex-direction: column;
+  }
+  
+  .user-dao-stats,
+  .pool-dao-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Proposal Card Additional Styles */
+.proposal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.proposal-title {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.proposal-title h3 {
+  font-size: 1.4rem;
+  color: #ffffff;
+  margin: 0;
+}
+
+.proposal-id {
+  color: #93c2ff;
+  font-size: 0.9rem;
+}
+
+.proposal-type {
+  background: rgba(28, 137, 253, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  color: #93c2ff;
+  font-size: 0.9rem;
+  border: 1px solid rgba(28, 137, 253, 0.3);
+}
+
+.proposal-description {
+  color: #93c2ff;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.proposal-stats {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.proposal-stats label {
+  color: #93c2ff;
+  font-size: 0.9rem;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.proposal-stats span {
+  color: #ffffff;
+}
+
+/* Voting Progress Additional Styles */
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  color: #93c2ff;
+  margin-bottom: 0.5rem;
+}
+
+.vote-counts {
+  display: flex;
+  justify-content: space-between;
+  color: #93c2ff;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+/* Your Vote Section */
+.your-vote {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(28, 137, 253, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(28, 137, 253, 0.2);
+}
+
+.change-vote-btn {
+  background: rgba(28, 137, 253, 0.1);
+  border: 1px solid rgba(28, 137, 253, 0.3);
+  color: #93c2ff;
+  padding: 0.8rem 1.2rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Claim Review Additional Styles */
+.claim-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.claim-info h3 {
+  font-size: 1.4rem;
+  color: #ffffff;
+  margin: 0 0 0.5rem 0;
+}
+
+.claim-type {
+  background: rgba(28, 137, 253, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  color: #93c2ff;
+  font-size: 0.9rem;
+  border: 1px solid rgba(28, 137, 253, 0.3);
+}
+
+.claim-amount {
+  font-size: 1.6rem;
+  color: #00ff9d;
+  text-shadow: 0 0 20px rgba(0, 255, 157, 0.3);
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid rgba(28, 137, 253, 0.2);
+}
+
+.detail-row span:first-child {
+  color: #93c2ff;
+}
+
+.detail-row span:last-child {
+  color: #ffffff;
+}
+
+/* Vote Buttons */
+.vote-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.approve-btn,
+.reject-btn {
+  flex: 1;
+  padding: 1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  border: 1px solid;
+}
+
+.approve-btn {
+  background: rgba(0, 255, 157, 0.1);
+  color: #00ff9d;
+  border-color: rgba(0, 255, 157, 0.3);
+  box-shadow: 
+    0 0 20px rgba(0, 255, 157, 0.15),
+    inset 0 0 10px rgba(0, 255, 157, 0.05);
+}
+
+.reject-btn {
+  background: rgba(255, 69, 58, 0.1);
+  color: #ff453a;
+  border-color: rgba(255, 69, 58, 0.3);
+  box-shadow: 
+    0 0 20px rgba(255, 69, 58, 0.15),
+    inset 0 0 10px rgba(255, 69, 58, 0.05);
+}
+
+/* Activity Feed Enhancements */
+.activity-content {
+  flex: 1;
+}
+
+.activity-description {
+  color: #ffffff;
+  margin: 0 0 0.5rem 0;
+}
+
+.activity-amount {
+  color: #00ff9d;
+  font-size: 0.9rem;
+  margin-right: 1rem;
+}
+
+.activity-time {
+  color: #93c2ff;
+  font-size: 0.9rem;
+}

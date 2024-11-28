@@ -1,0 +1,1014 @@
+/* Main Container */
+.dashboard-new {
+  background: #000000;
+  min-height: 100vh;
+  padding: 2rem;
+  display: grid;
+  gap: 2rem;
+  grid-template-areas:
+    "insurance pool-dao"
+    "claims claims";
+  grid-template-columns: 1fr 2fr;
+  margin-top: 70px;
+  color: #ffffff;
+}
+
+/* Insurance Overview */
+.insurance-overview {
+  grid-area: insurance;
+}
+
+.insurance-card {
+  background: linear-gradient(145deg, rgba(28, 137, 253, 0.1), rgba(0, 0, 0, 0.4));
+  border-radius: 24px;
+  padding: 2rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid rgba(28, 137, 253, 0.3);
+  box-shadow: 
+    0 0 20px rgba(28, 137, 253, 0.2),
+    0 0 40px rgba(28, 137, 253, 0.1),
+    inset 0 0 20px rgba(28, 137, 253, 0.1);
+  position: relative;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 0 20px rgba(28, 137, 253, 0.2),
+    inset 0 0 20px rgba(28, 137, 253, 0.1);
+}
+
+.insurance-card:hover {
+  border-color: rgba(28, 137, 253, 0.6);
+  box-shadow: 
+    0 0 30px rgba(28, 137, 253, 0.3),
+    inset 0 0 30px rgba(28, 137, 253, 0.15);
+}
+
+.insurance-status {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.insurance-status h2 {
+  font-size: 2.5rem;
+  color: #1c89fd;
+  margin: 1rem 0;
+  text-shadow: 0 0 20px rgba(28, 137, 253, 0.5);
+}
+
+.insurance-status p {
+  color: #93c2ff;
+  font-size: 1.1rem;
+}
+
+.insurance-details {
+  display: flex;
+  gap: 2rem;
+}
+
+.detail {
+  text-align: center;
+  padding: 1rem;
+  background: rgba(28, 137, 253, 0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(28, 137, 253, 0.1);
+  min-width: 150px;
+}
+
+.detail span {
+  color: #93c2ff;
+  font-size: 0.9rem;
+}
+
+.detail h3 {
+  color: #1c89fd;
+  font-size: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+/* Pool & DAO Overview */
+.pool-dao-overview {
+  grid-area: pool-dao;
+  background: rgba(28, 137, 253, 0.05);
+  border-radius: 24px;
+  padding: 2rem;
+  border: 1px solid rgba(28, 137, 253, 0.3);
+  box-shadow: 
+    0 0 20px rgba(28, 137, 253, 0.2),
+    0 0 40px rgba(28, 137, 253, 0.1),
+    inset 0 0 20px rgba(28, 137, 253, 0.1);
+  position: relative;
+  height: 100%;
+  box-shadow: 
+    0 0 20px rgba(28, 137, 253, 0.2),
+    inset 0 0 20px rgba(28, 137, 253, 0.1);
+}
+
+/* Pool Content */
+.pool-content {
+  padding: 1rem;
+}
+
+.main-stat {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.main-stat h2 {
+  font-size: 3rem;
+  color: #1c89fd;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 20px rgba(28, 137, 253, 0.5);
+}
+
+.main-stat p {
+  color: #93c2ff;
+  font-size: 1.2rem;
+}
+
+.percentage {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: rgba(0, 255, 157, 0.1);
+  border-radius: 20px;
+  color: #00ff9d;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}
+
+/* Staking Content */
+.staking-content {
+  padding: 1rem;
+}
+
+.staking-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-box {
+  background: rgba(28, 137, 253, 0.08);
+  border-radius: 16px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(28, 137, 253, 0.3);
+  box-shadow: 0 0 15px rgba(28, 137, 253, 0.15);
+}
+
+.stat-box:hover {
+  border-color: rgba(28, 137, 253, 0.5);
+  box-shadow: 0 0 20px rgba(28, 137, 253, 0.25);
+  transform: translateY(-2px);
+}
+
+.stat-box h3 {
+  color: #1c89fd;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.stat-box p {
+  color: #93c2ff;
+  font-size: 0.9rem;
+}
+
+/* DAO Content */
+.dao-content {
+  padding: 1rem;
+}
+
+.voting-power {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.voting-power h3 {
+  font-size: 2.5rem;
+  color: #1c89fd;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 20px rgba(28, 137, 253, 0.5);
+}
+
+.voting-power p {
+  color: #93c2ff;
+  font-size: 1.1rem;
+}
+
+.active-proposals {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: rgba(28, 137, 253, 0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(28, 137, 253, 0.1);
+}
+
+.active-proposals span {
+  color: #93c2ff;
+  font-size: 1.1rem;
+}
+
+.active-proposals button {
+  background: linear-gradient(135deg, #1c89fd, #93c2ff);
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(28, 137, 253, 0.5);
+  box-shadow: 
+    0 0 20px rgba(28, 137, 253, 0.2),
+    inset 0 0 10px rgba(28, 137, 253, 0.1);
+}
+
+.active-proposals button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, 
+    rgba(255, 255, 255, 0.1), 
+    transparent 70%);
+  animation: rotate 10s linear infinite;
+}
+
+.active-proposals button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(28, 137, 253, 0.3);
+}
+
+.active-proposals button:hover {
+  box-shadow: 
+    0 0 30px rgba(28, 137, 253, 0.3),
+    inset 0 0 15px rgba(28, 137, 253, 0.15);
+}
+
+/* Claims Overview */
+.claims-overview {
+  grid-area: claims;
+  animation: slideUp 0.8s ease-out;
+}
+
+.claims-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.claims-header h2 {
+  color: #ffffff;
+  font-size: 1.8rem;
+}
+
+.new-claim {
+  background: linear-gradient(135deg, #1c89fd, #93c2ff);
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(28, 137, 253, 0.5);
+  box-shadow: 
+    0 0 20px rgba(28, 137, 253, 0.2),
+    inset 0 0 10px rgba(28, 137, 253, 0.1);
+}
+
+.new-claim:hover {
+  box-shadow: 
+    0 0 30px rgba(28, 137, 253, 0.3),
+    inset 0 0 15px rgba(28, 137, 253, 0.15);
+}
+
+.claims-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.claim-card {
+  background: rgba(28, 137, 253, 0.05);
+  border-radius: 20px;
+  padding: 1.5rem;
+  border: 1px solid rgba(28, 137, 253, 0.3);
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 0 15px rgba(28, 137, 253, 0.15),
+    inset 0 0 15px rgba(28, 137, 253, 0.05);
+}
+
+.claim-card:hover {
+  border-color: rgba(28, 137, 253, 0.5);
+  box-shadow: 
+    0 0 25px rgba(28, 137, 253, 0.25),
+    inset 0 0 25px rgba(28, 137, 253, 0.1);
+  transform: translateY(-2px);
+}
+
+.claim-info {
+  margin-top: 1rem;
+}
+
+.claim-info p {
+  color: #93c2ff;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.claim-info span {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.ai-score {
+  margin-top: 1rem;
+}
+
+.score-bar {
+  height: 6px;
+  background: rgba(28, 137, 253, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.score-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #1c89fd, #93c2ff);
+  transition: width 0.6s ease-out;
+}
+
+.ai-score span {
+  color: #93c2ff;
+  font-size: 0.9rem;
+}
+
+/* Animations */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideRight {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .dashboard-new {
+    grid-template-areas:
+      "insurance"
+      "pool-dao"
+      "claims";
+    grid-template-columns: 1fr;
+  }
+  
+  .insurance-card,
+  .pool-dao-overview {
+    height: auto;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(28, 137, 253, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(28, 137, 253, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(28, 137, 253, 0.5);
+}
+
+/* Hover Effects */
+.stat-box:hover {
+  transform: translateY(-5px);
+  background: rgba(28, 137, 253, 0.12);
+  border-color: rgba(28, 137, 253, 0.3);
+}
+
+.claim-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(28, 137, 253, 0.3);
+  box-shadow: 0 8px 32px rgba(28, 137, 253, 0.15);
+}
+
+.new-claim:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(28, 137, 253, 0.3);
+}
+
+/* Animations */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(28, 137, 253, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(28, 137, 253, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(28, 137, 253, 0);
+  }
+}
+
+@keyframes glow {
+  0% {
+    text-shadow: 0 0 10px rgba(28, 137, 253, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(28, 137, 253, 0.7);
+  }
+  100% {
+    text-shadow: 0 0 10px rgba(28, 137, 253, 0.5);
+  }
+}
+
+/* Tab Styles */
+.tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(28, 137, 253, 0.2);
+  padding-bottom: 1rem;
+}
+
+.tab {
+  background: transparent;
+  border: none;
+  color: #93c2ff;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+  font-size: 1.1rem;
+}
+
+.tab:hover {
+  color: #1c89fd;
+}
+
+.tab.active {
+  color: #1c89fd;
+}
+
+.tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1rem;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #1c89fd, transparent);
+  animation: slideRight 0.3s ease-out;
+  box-shadow: 0 0 10px rgba(28, 137, 253, 0.4);
+}
+
+/* Action Buttons */
+.stake-action {
+  background: linear-gradient(135deg, #1c89fd, #093d7a);
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 0 20px rgba(28, 137, 253, 0.2),
+    inset 0 0 10px rgba(28, 137, 253, 0.1);
+}
+
+.stake-action::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: 0.5s;
+}
+
+.stake-action:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #2196ff, #1c89fd);
+  box-shadow: 
+    0 0 30px rgba(28, 137, 253, 0.3),
+    inset 0 0 15px rgba(28, 137, 253, 0.2);
+}
+
+.stake-action:hover::before {
+  left: 100%;
+}
+
+/* Highlight Effects */
+.stat-box.highlight {
+  background: linear-gradient(145deg, 
+    rgba(0, 255, 157, 0.1), 
+    rgba(0, 255, 157, 0.02));
+  border-color: rgba(0, 255, 157, 0.2);
+  border-color: rgba(0, 255, 157, 0.4);
+  box-shadow: 
+    0 0 20px rgba(0, 255, 157, 0.15),
+    inset 0 0 20px rgba(0, 255, 157, 0.05);
+}
+
+.stat-box.highlight h3 {
+  color: #00ff9d;
+  text-shadow: 0 0 20px rgba(0, 255, 157, 0.3);
+}
+
+.stat-box.highlight:hover {
+  border-color: rgba(0, 255, 157, 0.6);
+  box-shadow: 
+    0 0 25px rgba(0, 255, 157, 0.25),
+    inset 0 0 25px rgba(0, 255, 157, 0.1);
+}
+
+/* Button Loading State (optional) */
+.stake-action.loading,
+.active-proposals button.loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.stake-action.loading::after,
+.active-proposals button.loading::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 50%;
+  left: 50%;
+  margin: -10px 0 0 -10px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Button Disabled State (optional) */
+.stake-action:disabled,
+.active-proposals button:disabled {
+  background: linear-gradient(135deg, #1c89fd50, #93c2ff50);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Status Badge Enhancement */
+.status {
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  box-shadow: 0 0 15px rgba(28, 137, 253, 0.2);
+}
+
+.status.pending-ai-review {
+  background: rgba(147, 194, 255, 0.1);
+  color: #93c2ff;
+  border: 1px solid rgba(147, 194, 255, 0.3);
+  box-shadow: 0 0 15px rgba(147, 194, 255, 0.15);
+}
+
+.status.dao-voting {
+  background: rgba(0, 255, 157, 0.1);
+  color: #00ff9d;
+  border: 1px solid rgba(0, 255, 157, 0.3);
+  box-shadow: 0 0 15px rgba(0, 255, 157, 0.15);
+}
+
+/* Button Enhancement */
+.stake-action, 
+.new-claim,
+.active-proposals button {
+  border: 1px solid rgba(28, 137, 253, 0.5);
+  box-shadow: 
+    0 0 20px rgba(28, 137, 253, 0.2),
+    inset 0 0 10px rgba(28, 137, 253, 0.1);
+}
+
+.stake-action:hover, 
+.new-claim:hover,
+.active-proposals button:hover {
+  box-shadow: 
+    0 0 30px rgba(28, 137, 253, 0.3),
+    inset 0 0 15px rgba(28, 137, 253, 0.15);
+}
+
+/* Claims Section Tabs */
+.claims-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 2rem;
+  background: rgba(28, 137, 253, 0.08);
+  border-radius: 16px;
+  border: 1px solid rgba(28, 137, 253, 0.2);
+  box-shadow: 
+    0 0 20px rgba(28, 137, 253, 0.15),
+    inset 0 0 15px rgba(28, 137, 253, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.claim-tab {
+  background: transparent;
+  border: none;
+  color: #93c2ff;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 1rem;
+  font-weight: 500;
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.claim-tab:hover {
+  color: #ffffff;
+}
+
+.claim-tab.active {
+  background: linear-gradient(
+    135deg,
+    rgba(28, 137, 253, 0.2),
+    rgba(28, 137, 253, 0.1)
+  );
+  color: #ffffff;
+  box-shadow: 
+    0 0 20px rgba(28, 137, 253, 0.2),
+    inset 0 0 10px rgba(28, 137, 253, 0.1);
+}
+
+.claim-tab.active::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(28, 137, 253, 0.2),
+    transparent,
+    rgba(28, 137, 253, 0.2)
+  );
+  border-radius: inherit;
+  animation: tabGlow 2s ease-in-out infinite;
+}
+
+@keyframes tabGlow {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Optional: Add this if you want a subtle transition effect when switching tabs */
+.claims-grid {
+  animation: fadeScale 0.3s ease-out;
+}
+
+@keyframes fadeScale {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Update Claims Header for better alignment with tabs */
+.claims-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Animation for tab content */
+.claims-grid {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Status colors for past claims */
+.status.completed {
+  background: rgba(0, 255, 157, 0.1);
+  color: #00ff9d;
+  border: 1px solid rgba(0, 255, 157, 0.3);
+  box-shadow: 0 0 15px rgba(0, 255, 157, 0.15);
+}
+
+.status.rejected {
+  background: rgba(255, 69, 58, 0.1);
+  color: #ff453a;
+  border: 1px solid rgba(255, 69, 58, 0.3);
+  box-shadow: 0 0 15px rgba(255, 69, 58, 0.15);
+}
+
+/* Enhanced Card Borders with Glow */
+.insurance-card, .pool-dao-overview, .claim-card {
+  border: 1px solid rgba(28, 137, 253, 0.3);
+  box-shadow: 
+    0 0 20px rgba(28, 137, 253, 0.2),
+    0 0 40px rgba(28, 137, 253, 0.1),
+    inset 0 0 20px rgba(28, 137, 253, 0.1);
+  position: relative;
+}
+
+/* Animated Border Glow */
+.insurance-card::after, 
+.pool-dao-overview::after, 
+.claim-card::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: inherit;
+  background: linear-gradient(
+    45deg,
+    rgba(28, 137, 253, 0.3),
+    rgba(147, 194, 255, 0.1),
+    rgba(28, 137, 253, 0.3)
+  );
+  z-index: -1;
+  animation: borderGlow 3s ease-in-out infinite;
+}
+
+@keyframes borderGlow {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Vote Stats */
+.vote-stats {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(28, 137, 253, 0.2);
+}
+
+.vote-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.vote-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.vote-label {
+  width: 30px;
+  color: #93c2ff;
+  font-size: 0.9rem;
+}
+
+.vote-progress {
+  flex: 1;
+  height: 6px;
+  background: rgba(28, 137, 253, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.vote-fill {
+  height: 100%;
+  transition: width 0.6s ease-out;
+}
+
+.vote-fill.yes {
+  background: linear-gradient(90deg, #00ff9d, #00ff9d80);
+  box-shadow: 0 0 10px rgba(0, 255, 157, 0.3);
+}
+
+.vote-fill.no {
+  background: linear-gradient(90deg, #ff453a, #ff453a80);
+  box-shadow: 0 0 10px rgba(255, 69, 58, 0.3);
+}
+
+.vote-bar span {
+  min-width: 30px;
+  text-align: right;
+  color: #93c2ff;
+  font-size: 0.9rem;
+}
+
+.voting-ends {
+  margin-top: 1rem;
+  color: #93c2ff;
+  font-size: 0.9rem;
+  text-align: right;
+}
+
+/* Claim Result/Reason Section */
+.claim-result {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 12px;
+  background: rgba(28, 137, 253, 0.05);
+  border: 1px solid rgba(28, 137, 253, 0.2);
+  box-shadow: 
+    0 0 15px rgba(28, 137, 253, 0.1),
+    inset 0 0 10px rgba(28, 137, 253, 0.05);
+}
+
+/* Approved Payout Style */
+.payout {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #00ff9d;
+  font-size: 1rem;
+  padding: 0.5rem 0;
+}
+
+.payout span {
+  color: #93c2ff;
+  font-size: 0.9rem;
+}
+
+/* Rejection Reason Style */
+.reject-reason {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  color: #ff453a;
+  font-size: 1rem;
+  padding: 0.5rem 0;
+}
+
+.reject-reason span {
+  color: #93c2ff;
+  font-size: 0.9rem;
+  min-width: 70px;
+}
+
+/* Appeal Reason Style */
+.appeal-reason {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  color: #ff9f1c;
+  font-size: 1rem;
+  padding: 0.5rem 0;
+}
+
+.appeal-reason span {
+  color: #93c2ff;
+  font-size: 0.9rem;
+  min-width: 70px;
+}
+
+/* Add divider between multiple reasons if needed */
+.claim-result > div:not(:last-child) {
+  border-bottom: 1px solid rgba(28, 137, 253, 0.2);
+  margin-bottom: 0.5rem;
+}
+
+/* New Active Status Style */
+.status-active {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.6rem 1.2rem;
+  background: rgba(0, 255, 157, 0.1);
+  border: 1px solid rgba(0, 255, 157, 0.3);
+  border-radius: 20px;
+  color: #00ff9d;
+  font-size: 1.1rem;
+  box-shadow: 0 0 20px rgba(0, 255, 157, 0.15);
+  animation: statusPulse 2s infinite;
+}
+
+.status-active::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: #00ff9d;
+  border-radius: 50%;
+  margin-right: 10px;
+  box-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+  animation: dotPulse 2s infinite;
+}
+
+@keyframes statusPulse {
+  0% {
+    box-shadow: 0 0 20px rgba(0, 255, 157, 0.475);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(0, 255, 157, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 20px rgba(0, 255, 157, 0.533);
+  }
+}
+
+@keyframes dotPulse {
+  0% {
+    box-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(0, 255, 157, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+  }
+}

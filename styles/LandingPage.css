@@ -1,0 +1,183 @@
+/* Global CSS for landing page */
+
+.landingContainer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 100vh;
+    padding: 0 5%;
+    color: #000000;
+    margin-top: 15px;
+}
+
+.landingLeft {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.landingLeftTop {
+    margin-bottom: 2rem;
+}
+
+.landingLeftTop h1 {
+    font-size: 70px;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    
+    /* Remove solid color */
+    color: transparent;
+    
+    /* Add gradient background */
+    background: linear-gradient(90deg, #1c89fd, #93c2ff, #1c89fd);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    
+    /* Add animation */
+    animation: gradientFlow 2s linear infinite;
+}
+
+@keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+.landingLeftTop p {
+    font-size: 1.2rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.767);
+}
+
+.landingLeftBottom {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1.5rem;
+}
+
+/* Enhanced Button Styles */
+.landingLeftBottomButton1, .landingLeftBottomButton2 {
+    padding: 15px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* Primary Button */
+.landingLeftBottomButton1 {
+    background-color: #1c89fd;
+    color: white;
+    border: none;
+}
+
+.landingLeftBottomButton1:hover {
+    background: radial-gradient(circle at center,
+        #213958 0%,
+        #1670d1 100%
+    );
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(28, 137, 253, 0.4);
+}
+
+.landingLeftBottomButton1:active {
+    transform: translateY(1px);
+}
+
+/* Secondary Button */
+.landingLeftBottomButton2 {
+    background: transparent;
+    border: 2px solid #1c89fd;
+    color: #1c89fd;
+    position: relative;
+    overflow: hidden;
+}
+
+.landingLeftBottomButton2::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: radial-gradient(circle at center,
+        #213958 0%,
+        #1670d1 100%
+    );
+    box-shadow: 0 6px 25px rgba(28, 137, 253, 0.4);
+    transition: width 0.21s ease;
+    z-index: -1;
+}
+
+.landingLeftBottomButton2:hover {
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(28, 137, 253, 0.2);
+    border-color: transparent;
+}
+
+.landingLeftBottomButton2:hover::before {
+    width: 100%;
+}
+
+/* Shine effect for both buttons */
+.landingLeftBottomButton1::after,
+.landingLeftBottomButton2::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+    );
+    transform: rotate(45deg);
+    transition: 0.5s;
+    opacity: 0;
+}
+
+.landingLeftBottomButton1:hover::after,
+.landingLeftBottomButton2:hover::after {
+    opacity: 1;
+    left: 100%;
+}
+
+.landingRight {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    margin-top: 24px;
+}
+
+@media (max-width: 768px) {
+    .landingContainer {
+        flex-direction: column;
+        padding: 2rem;
+    }
+
+    .landingLeftTop h1 {
+        font-size: 40px;
+    }
+
+    .landingLeftBottom {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .landingLeftBottomButton1,
+    .landingLeftBottomButton2 {
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+}

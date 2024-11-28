@@ -1,0 +1,349 @@
+.container {
+    min-height: 100vh;
+    background-color: black;
+    padding: 24px;
+  }
+  
+  .inner-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .buy-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  
+  .title {
+    font-size: 48px;
+    font-weight: bold;
+    color: #22d3ee;
+    margin-top: 54px;
+    margin-bottom: 18px;
+    animation: pulse 2s infinite;
+  }
+  
+  .subtitle {
+    font-size: 20px;
+    color: #93c5fd;
+    max-width: 600px;
+    margin: 0 auto 32px;
+  }
+  
+  .wallet-section {
+    margin-bottom: 32px;
+    text-align: center;
+  }
+  
+  .connect-button {
+    background: linear-gradient(to right, #3b82f6, #06b6d4);
+    color: white;
+    font-weight: bold;
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .connect-button:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.5);
+  }
+  
+  .wallet-address {
+    color: #22d3ee;
+    font-family: monospace;
+  }
+  
+  .payment-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    background-color: #1f2937;
+    padding: 8px;
+    border-radius: 8px;
+    margin: 32px auto;
+    width: fit-content;
+  }
+  
+  .toggle-button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .toggle-button.active {
+    background-color: #3b82f6;
+    color: white;
+  }
+  
+  .toggle-button:not(.active) {
+    color: #93c5fd;
+    background: transparent;
+  }
+  
+  .alert {
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .alert-error {
+    background-color: rgba(127, 29, 29, 0.5);
+    border: 1px solid #ef4444;
+    color: white;
+  }
+  
+  .alert-success {
+    background-color: rgba(20, 83, 45, 0.5);
+    border: 1px solid #22c55e;
+    color: white;
+  }
+  
+  .plans-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    margin-bottom: 48px;
+  }
+  
+  @media (min-width: 768px) {
+    .plans-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .plans-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  .plan-card {
+    position: relative;
+    background: linear-gradient(to bottom right, #1e1e1e, #2d2d2d);
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 24px;
+    transition: all 0.3s;
+  }
+  
+  .plan-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.2);
+    border-color: #3b82f6;
+  }
+  
+  .plan-badge {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    transform: rotate(12deg);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  .badge-blue { background-color: #3b82f6; }
+  .badge-purple { background-color: #8b5cf6; }
+  .badge-emerald { background-color: #10b981; }
+  
+  .plan-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 8px;
+  }
+  
+  .plan-coverage {
+    color: #93c5fd;
+    margin-bottom: 16px;
+  }
+  
+  .plan-price {
+    font-size: 32px;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 8px;
+  }
+  
+  .price-suffix {
+    font-size: 14px;
+    color: #93c5fd;
+  }
+  
+  .yearly-savings {
+    color: #34d399;
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+  
+  .max-coverage {
+    font-size: 14px;
+    color: #93c5fd;
+    margin-bottom: 24px;
+  }
+  
+  .features-list {
+    margin-bottom: 24px;
+  }
+  
+  .feature-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #d1d5db;
+    margin-bottom: 8px;
+  }
+  
+  .benefits-section {
+    background-color: rgba(31, 41, 55, 0.5);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+  
+  .benefits-title {
+    color: white;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  .benefits-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .benefit-item {
+    color: #9ca3af;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  
+  .purchase-button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  
+  .purchase-button:disabled {
+    background-color: #4b5563;
+    cursor: not-allowed;
+  }
+  
+  .button-blue { background: linear-gradient(to right, #3b82f6, #2563eb); }
+  .button-purple { background: linear-gradient(to right, #8b5cf6, #7c3aed); }
+  .button-emerald { background: linear-gradient(to right, #10b981, #059669); }
+  
+  .purchase-button:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  }
+  
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  /* Info Section Styles */
+.info-section {
+    padding: 48px 0;
+    border-top: 1px solid #333;
+    margin-top: 48px;
+  }
+  
+  .info-title {
+    text-align: center;
+    color: #22d3ee;
+    font-size: 32px;
+    margin-bottom: 32px;
+  }
+  
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 24px;
+  }
+  
+  @media (min-width: 768px) {
+    .info-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .info-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  
+  .info-card {
+    background: linear-gradient(145deg, #1e1e1e, #2d2d2d);
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 24px;
+    transition: all 0.3s ease;
+  }
+  
+  .info-card:hover {
+    transform: translateY(-5px);
+    border-color: #22d3ee;
+    box-shadow: 0 4px 20px rgba(34, 211, 238, 0.1);
+  }
+  
+  .info-card h3 {
+    color: #22d3ee;
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+  
+  .info-card p {
+    color: #93c5fd;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  /* Loading State Styles */
+  .loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+  
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #22d3ee;
+    border-top: 4px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }

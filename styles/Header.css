@@ -1,0 +1,138 @@
+/* Header Styles */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #000;
+    color: #fff;
+    padding: 9px 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+  }
+  
+  .logo img{
+    height: 75px;
+    width: 75px;
+    margin-left: 10px;
+  }
+  
+  .nav {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .navList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .navItem {
+    margin: 0 20px;
+  }
+  
+  .navItem a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 18px;
+    transition: color 0.3s;
+    position: relative;
+  }
+  
+  .navItem.active a {
+    color: #1c89fd;
+  }
+  
+  .navItem.active a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #1c89fd;
+    transform: scaleX(1);
+    transition: transform 0.3s ease;
+  }
+  
+  .navItem a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #1c89fd;
+    transform: scaleX(0);
+    transition: transform 0.21s ease;
+  }
+  
+  .navItem:hover a::after {
+    transform: scaleX(1);
+  }
+  
+  .walletStatus {
+    margin-left: auto;
+    margin-right: 20px;
+  }
+  
+  .connectButton {
+    background-color: #1c89fd;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 12px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(28, 137, 253, 0.2);
+  }
+  
+  /* Connected wallet style */
+  .connectButton.connected {
+    background: transparent;
+    border: 2px solid #1c89fd;
+    color: #1c89fd;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  /* Add dot indicator for connected state */
+  .connectButton.connected::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background-color: #1c89fd;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 4px;
+    animation: pulse 2s infinite;
+  }
+  
+  
+  .connectButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(28, 137, 253, 0.3);
+    background-color: #176eca;
+  }
+  
+  .connectButton.connected:hover {
+    background: rgba(28, 137, 253, 0.1);
+    color: #93c2ff;
+    border-color: #93c2ff;
+  }
+  
+  .connectButton:active {
+    transform: translateY(1px);
+  }
+  
