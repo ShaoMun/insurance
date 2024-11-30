@@ -8,7 +8,6 @@ export default function Loading() {
   const { confidenceScore, amount, evidenceURI } = router.query;
   const [showButtons, setShowButtons] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     if (!confidenceScore || !amount || !evidenceURI) return;
@@ -41,7 +40,6 @@ export default function Loading() {
 
         } catch (error) {
           console.error("Failed to submit claim:", error);
-          setError(error.message || "Failed to submit claim");
         }
       }
       setShowButtons(true);

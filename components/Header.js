@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useWallet } from '../context/WalletContext';
 
 export default function Header() {
@@ -10,7 +11,15 @@ export default function Header() {
   return (
     <header className="header">
       <div className="logo">
-        <Link href="/"><img src="/logo.png" alt="Logo" /></Link>
+        <Link href="/">
+          <Image 
+            src="/logo.png" 
+            alt="Logo" 
+            width={75} 
+            height={75}
+            priority
+          />
+        </Link>
       </div>
       <nav className="nav">
         <ul className="navList">

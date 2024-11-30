@@ -55,7 +55,6 @@ const Dashboard = () => {
         const staker = await poolContract.stakers(userAddress);
         const stakedAmount = ethers.formatEther(staker.balance);
         const lockDuration = Number(staker.lockDuration);
-        const unlockTime = Number(staker.unlockTime);
         
         // Calculate APR based on lock duration
         let apr;

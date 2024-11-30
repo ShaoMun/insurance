@@ -354,14 +354,6 @@ const DAO = () => {
     </div>
   );
 
-  const handleButtonHover = (e) => {
-    e.currentTarget.style.transform = 'translateY(-2px)';
-  };
-
-  const handleButtonLeave = (e) => {
-    e.currentTarget.style.transform = 'translateY(0)';
-  };
-
   return (
     <div className="dao-container">
       {/* DAO Overview Stats */}

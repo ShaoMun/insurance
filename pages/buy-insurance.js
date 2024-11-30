@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
-import { getPoolContract, getDAOContract } from "../utils/contracts"; // Import utilities for Pool and DAO contracts
+import { getPoolContract } from "../utils/contracts"; // Import utilities for Pool and DAO contracts
 
 const insurancePlans = [
   {
@@ -67,10 +67,8 @@ export default function BuyInsurance() {
 
   useEffect(() => {
     checkWalletConnection();
-    if (account) {
-      fetchUserCoverage();
-    }
-  }, [account]);
+    fetchUserCoverage();
+  }, [checkWalletConnection, fetchUserCoverage]);
 
   const checkWalletConnection = async () => {
     if (typeof window.ethereum !== "undefined") {
