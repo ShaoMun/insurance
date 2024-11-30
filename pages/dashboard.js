@@ -79,9 +79,6 @@ const Dashboard = () => {
             try {
               const proposal = await daoContract.proposals(i);
               
-              console.log("Claim claimant:", claim.claimant);
-              console.log("User address:", userAddress);
-              
               claims.push({
                 id: `CLM-${i.toString().padStart(3, '0')}`,
                 type: "Insurance Claim",
@@ -107,8 +104,6 @@ const Dashboard = () => {
         // Get active proposals count
         const activeProposalCount = await daoContract.activeProposalCount();
 
-        // Filter claims for the current user
-        const userClaims = claims.filter(claim => claim.claimant === userAddress);
 
         // Update state with real data
         setDashboardData({
@@ -403,7 +398,7 @@ const Dashboard = () => {
                   claim.submittedBy.toLowerCase() === dashboardData.userAddress.toLowerCase()
                 ) && (
                   <div className="no-claims">
-                    <p>You haven't submitted any claims yet</p>
+                    <p>You haven&apos;t submitted any claims yet</p>
                   </div>
                 )}
             </>

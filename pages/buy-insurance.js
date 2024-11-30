@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
-import { getPoolContract, getDAOContract } from "../utils/contracts"; // Import utilities for Pool and DAO contracts
+import { getPoolContract } from "../utils/contracts";
 
 const insurancePlans = [
   {
@@ -67,19 +67,19 @@ export default function BuyInsurance() {
 
   useEffect(() => {
     checkWalletConnection();
-    if (account) {
-      fetchUserCoverage();
-    }
+    if (account) fetchUserCoverage();
   }, [account]);
 
   const checkWalletConnection = async () => {
     if (typeof window.ethereum !== "undefined") {
-      const accounts = await window.ethereum.request({
-        method: "eth_accounts",
-      });
-      if (accounts.length > 0) {
-        setAccount(accounts[0]);
-        fetchBalance(accounts[0]);
+      try {
+        const accounts = await window.ethereum.request({ method: "eth_accounts" });
+        if (accounts.length > 0) {
+          setAccount(accounts[0]);
+          fetchBalance(accounts[0]);
+        }
+      } catch (err) {
+        setError("Failed to connect wallet. Please try again.");
       }
     }
   };
@@ -91,6 +91,19 @@ export default function BuyInsurance() {
       setBalance(ethers.formatEther(balance));
     } catch (err) {
       console.error("Failed to fetch balance:", err);
+    }
+  };
+
+  const fetchUserCoverage = async () => {
+    if (!account) return;
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const poolContract = getPoolContract(provider);
+      const userData = await poolContract.users(account);
+      const [, userCoverage] = userData;
+      setCoverage(ethers.formatEther(userCoverage));
+    } catch (err) {
+      console.error("Failed to fetch user coverage:", err);
     }
   };
 
@@ -111,49 +124,31 @@ export default function BuyInsurance() {
       setLoading(plan.id);
       setError("");
       setSuccess("");
-  
-      if (!account) {
-        throw new Error("Please connect your wallet first");
-      }
-  
+
+      if (!account) throw new Error("Please connect your wallet first.");
+
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
       const poolContract = getPoolContract(signer);
-  
+
       // Calculate premium amount based on payment type
       const premiumAmount = ethers.parseEther(
         paymentType === "yearly"
           ? (plan.monthlyPremium * 12 * (1 - parseInt(plan.yearlyDiscount) / 100)).toString()
           : plan.monthlyPremium.toString()
       );
-  
+
       // Call the payPremium function
       const tx = await poolContract.payPremium(plan.id - 1, { value: premiumAmount });
       await tx.wait();
-  
-      // Fetch updated user coverage
-      const [premiumPaid, userCoverage] = await poolContract.users(account);
-      
-      setSuccess(`Successfully purchased ${plan.name}! Your coverage: ${ethers.formatEther(userCoverage)} ETH`);
-      
-      // Refresh balance
-      fetchBalance(account);
+
+      // Update user coverage
+      fetchUserCoverage();
+      setSuccess(`Successfully purchased ${plan.name}.`);
     } catch (err) {
-      setError(err.message || "Failed to process transaction");
+      setError(err.message || "Transaction failed.");
     } finally {
       setLoading(null);
-    }
-  };
-  
-  const fetchUserCoverage = async () => {
-    if (!account) return;
-    try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const poolContract = getPoolContract(provider);
-      const [premiumPaid, userCoverage] = await poolContract.users(account);
-      setCoverage(ethers.formatEther(userCoverage));
-    } catch (err) {
-      console.error("Failed to fetch coverage:", err);
     }
   };
 
