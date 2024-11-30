@@ -132,7 +132,7 @@ export default function BuyInsurance() {
       // Refresh balance
       fetchBalance(account);
     } catch (err) {
-      setError(err.message || "Failed to process transaction");
+      console.error("Error occurred");
     } finally {
       setLoading(null);
     }

@@ -37,113 +37,113 @@ const Dashboard = () => {
     claims: []
   });
 
-  useEffect(() => {
-    const fetchDashboardData = useCallback(async () => {
-      try {
-        const provider = new ethers.BrowserProvider(window.ethereum);
-        const signer = await provider.getSigner();
-        const poolContract = getPoolContract(signer);
-        const daoContract = getDAOContract(signer);
-        const userAddress = await signer.getAddress();
+  const fetchDashboardData = useCallback(async () => {
+    try {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const poolContract = getPoolContract(signer);
+      const daoContract = getDAOContract(signer);
+      const userAddress = await signer.getAddress();
 
-        // Fetch user's insurance data
-        const user = await poolContract.users(userAddress);
-        const coverage = ethers.formatEther(user.coverage);
-        const premium = ethers.formatEther(user.totalPremiumPaid);
+      // Fetch user's insurance data
+      const user = await poolContract.users(userAddress);
+      const coverage = ethers.formatEther(user.coverage);
+      const premium = ethers.formatEther(user.totalPremiumPaid);
 
-        // Fetch staking data
-        const staker = await poolContract.stakers(userAddress);
-        const stakedAmount = ethers.formatEther(staker.balance);
-        const lockDuration = Number(staker.lockDuration);
-        
-        // Calculate APR based on lock duration
-        let apr;
-        if (lockDuration === 30 * 24 * 60 * 60) apr = "0.3";
-        else if (lockDuration === 180 * 24 * 60 * 60) apr = "2.0";
-        else if (lockDuration === 365 * 24 * 60 * 60) apr = "5.0";
-        else apr = "0";
+      // Fetch staking data
+      const staker = await poolContract.stakers(userAddress);
+      const stakedAmount = ethers.formatEther(staker.balance);
+      const lockDuration = Number(staker.lockDuration);
+      
+      // Calculate APR based on lock duration
+      let apr;
+      if (lockDuration === 30 * 24 * 60 * 60) apr = "0.3";
+      else if (lockDuration === 180 * 24 * 60 * 60) apr = "2.0";
+      else if (lockDuration === 365 * 24 * 60 * 60) apr = "5.0";
+      else apr = "0";
 
-        // Fetch pool and DAO data
-        const totalPremiums = await poolContract.totalPremiums();
-        const totalStaked = await poolContract.totalStaked();
-        const totalPoolSize = totalPremiums + totalStaked;
-        const votingPower = await daoContract.calculateVotingPower(userAddress);
-        
-        // Fetch claims
-        const claimCounter = await poolContract.claimCounter();
-        const claims = [];
-        
-        for(let i = 1; i <= claimCounter; i++) {
-          const claim = await poolContract.claims(i);
-          if(claim.exists) {
-            try {
-              const proposal = await daoContract.proposals(i);
-              
-              console.log("Claim claimant:", claim.claimant);
-              console.log("User address:", userAddress);
-              
-              claims.push({
-                id: `CLM-${i.toString().padStart(3, '0')}`,
-                type: "Insurance Claim",
-                amount: ethers.formatEther(claim.amount) + " ETH",
-                status: getClaimStatus(claim.status),
-                date: new Date(Number(claim.unlockTime) * 1000).toISOString().split('T')[0],
-                aiConfidence: Number(proposal.aiConfidence || 0),
-                description: "Claim #" + i,
-                claimant: claim.claimant,
-                submittedBy: claim.claimant,
-                votes: proposal.exists ? {
-                  yes: Number(proposal.yesVotes || 0),
-                  no: Number(proposal.noVotes || 0),
-                  votingEnds: getTimeRemaining(Number(proposal.timelockEnd))
-                } : null
-              });
-            } catch (error) {
-              console.error(`Error fetching proposal ${i}:`, error);
-            }
+      // Fetch pool and DAO data
+      const totalPremiums = await poolContract.totalPremiums();
+      const totalStaked = await poolContract.totalStaked();
+      const totalPoolSize = totalPremiums + totalStaked;
+      const votingPower = await daoContract.calculateVotingPower(userAddress);
+      
+      // Fetch claims
+      const claimCounter = await poolContract.claimCounter();
+      const claims = [];
+      
+      for(let i = 1; i <= claimCounter; i++) {
+        const claim = await poolContract.claims(i);
+        if(claim.exists) {
+          try {
+            const proposal = await daoContract.proposals(i);
+            
+            console.log("Claim claimant:", claim.claimant);
+            console.log("User address:", userAddress);
+            
+            claims.push({
+              id: `CLM-${i.toString().padStart(3, '0')}`,
+              type: "Insurance Claim",
+              amount: ethers.formatEther(claim.amount) + " ETH",
+              status: getClaimStatus(claim.status),
+              date: new Date(Number(claim.unlockTime) * 1000).toISOString().split('T')[0],
+              aiConfidence: Number(proposal.aiConfidence || 0),
+              description: "Claim #" + i,
+              claimant: claim.claimant,
+              submittedBy: claim.claimant,
+              votes: proposal.exists ? {
+                yes: Number(proposal.yesVotes || 0),
+                no: Number(proposal.noVotes || 0),
+                votingEnds: getTimeRemaining(Number(proposal.timelockEnd))
+              } : null
+            });
+          } catch (error) {
+            console.error(`Error fetching proposal ${i}:`, error);
           }
         }
-
-        // Get active proposals count
-        const activeProposalCount = await daoContract.activeProposalCount();
-
-        // Filter claims for the current user
-        const { otherData } = await contract.getUserData(account);
-
-        // Update state with real data
-        setDashboardData({
-          userAddress,
-          insurance: {
-            coverage: coverage + " ETH",
-            premium: premium + " ETH",
-            nextPayment: "-",
-            status: coverage > 0 ? "Active" : "Inactive"
-          },
-          poolAndDao: {
-            contribution: (Number(premium) + Number(stakedAmount)).toFixed(2) + " ETH",
-            totalPoolSize: ethers.formatEther(totalPoolSize) + " ETH",
-            sharePercentage: ((Number(premium) + Number(stakedAmount)) / Number(ethers.formatEther(totalPoolSize)) * 100).toFixed(2) + "%",
-            votingPower: Number(votingPower).toFixed(2) + "%",
-            staking: {
-              staked: stakedAmount + " ETH",
-              apr: apr + "%",
-              rewards: "Calculating...",
-              nextReward: "Calculating...",
-              lockPeriod: (lockDuration / (24 * 60 * 60)) + " days"
-            },
-            activeVotes: {
-              claims: claims.filter(c => c.status === "DAO Voting").length,
-              proposals: Number(activeProposalCount)
-            }
-          },
-          claims: claims
-        });
-
-      } catch (_) {
-        console.error("Failed to fetch dashboard data:", error);
       }
-    }, []);
 
+      // Get active proposals count
+      const activeProposalCount = await daoContract.activeProposalCount();
+
+      // Filter claims for the current user
+      const { usefulData } = await contract.getUserData(account);
+
+      // Update state with real data
+      setDashboardData({
+        userAddress,
+        insurance: {
+          coverage: coverage + " ETH",
+          premium: premium + " ETH",
+          nextPayment: "-",
+          status: coverage > 0 ? "Active" : "Inactive"
+        },
+        poolAndDao: {
+          contribution: (Number(premium) + Number(stakedAmount)).toFixed(2) + " ETH",
+          totalPoolSize: ethers.formatEther(totalPoolSize) + " ETH",
+          sharePercentage: ((Number(premium) + Number(stakedAmount)) / Number(ethers.formatEther(totalPoolSize)) * 100).toFixed(2) + "%",
+          votingPower: Number(votingPower).toFixed(2) + "%",
+          staking: {
+            staked: stakedAmount + " ETH",
+            apr: apr + "%",
+            rewards: "Calculating...",
+            nextReward: "Calculating...",
+            lockPeriod: (lockDuration / (24 * 60 * 60)) + " days"
+          },
+          activeVotes: {
+            claims: claims.filter(c => c.status === "DAO Voting").length,
+            proposals: Number(activeProposalCount)
+          }
+        },
+        claims: claims
+      });
+
+    } catch (error) {
+      console.error("Error fetching dashboard data:", error);
+    }
+  }, []);
+
+  useEffect(() => {
     fetchDashboardData();
   }, [fetchDashboardData]);
 
