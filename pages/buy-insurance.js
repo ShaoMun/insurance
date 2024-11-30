@@ -125,9 +125,9 @@ export default function BuyInsurance() {
       await tx.wait();
   
       // Fetch updated user coverage
-      const [premiumPaid, userCoverage] = await poolContract.users(account);
+      const { coverage: newCoverage } = await poolContract.getUserInsurance(account);
       
-      setSuccess(`Successfully purchased ${plan.name}! Your coverage: ${ethers.formatEther(userCoverage)} ETH`);
+      setSuccess(`Successfully purchased ${plan.name}! Your coverage: ${ethers.formatEther(newCoverage)} ETH`);
       
       // Refresh balance
       fetchBalance(account);
@@ -143,8 +143,8 @@ export default function BuyInsurance() {
     try {
       const provider = new ethers.BrowserProvider(window.ethereum);
       const poolContract = getPoolContract(provider);
-      const [premiumPaid, userCoverage] = await poolContract.users(account);
-      setCoverage(ethers.formatEther(userCoverage));
+      const { coverage } = await poolContract.getUserInsurance(account);
+      setCoverage(ethers.formatEther(coverage));
     } catch (err) {
       console.error("Failed to fetch coverage:", err);
     }
