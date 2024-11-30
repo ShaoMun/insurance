@@ -31,7 +31,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 30px;
+    gap: 40px;
   }
   
   .navItem {
@@ -256,5 +256,110 @@
   
   .navItem:not(.dropdown).active a::after {
     transform: scaleX(1);
+  }
+  
+  /* Add these media queries at the end of your existing CSS */
+
+  @media screen and (max-width: 768px) {
+    .header {
+      padding: 5px 10px;
+    }
+
+    .logo img {
+      height: 50px;
+      width: 50px;
+      margin-left: 5px;
+    }
+
+    .nav {
+      position: fixed;
+      top: 90px;
+      left: -100%;
+      width: 100%;
+      height: calc(100vh - 90px);
+      background: #000;
+      transition: 0.3s ease;
+      overflow-y: auto;
+    }
+
+    .nav.active {
+      left: 0;
+    }
+
+    .navList {
+      flex-direction: column;
+      gap: 0;
+      padding: 20px 0;
+    }
+
+    .navItem {
+      margin: 15px 0;
+      width: 100%;
+      text-align: center;
+    }
+
+    .dropdown-menu {
+      position: static;
+      transform: none;
+      background: #111;
+      margin-top: 15px;
+      visibility: visible;
+      opacity: 1;
+      display: none;
+    }
+
+    .dropdown:hover .dropdown-menu {
+      display: block;
+    }
+
+    .dropdown::after {
+      display: none;
+    }
+
+    .connectButton {
+      padding: 8px 16px;
+      font-size: 14px;
+    }
+
+    /* Hamburger menu */
+    .menuButton {
+      display: block;
+      cursor: pointer;
+      padding: 10px;
+    }
+
+    .menuButton span {
+      display: block;
+      width: 25px;
+      height: 3px;
+      background: #fff;
+      margin: 5px 0;
+      transition: 0.3s;
+    }
+
+    /* Active state for hamburger */
+    .menuButton.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .menuButton.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .menuButton.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(7px, -6px);
+    }
+  }
+
+  /* Smaller mobile devices */
+  @media screen and (max-width: 480px) {
+    .connectButton {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    .connectButton.connected {
+      font-size: 12px;
+    }
   }
   

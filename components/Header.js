@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -7,6 +7,11 @@ import { useWallet } from '../context/WalletContext';
 export default function Header() {
   const router = useRouter();
   const { account, isConnected, connectWallet, disconnectWallet } = useWallet();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   return (
     <header className="header">
@@ -21,7 +26,15 @@ export default function Header() {
           />
         </Link>
       </div>
-      <nav className="nav">
+      <div 
+        className={`menuButton ${isMenuOpen ? 'active' : ''}`}
+        onClick={toggleMenu}
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <nav className={`nav ${isMenuOpen ? 'active' : ''}`}>
         <ul className="navList">
           <li className={`navItem ${router.pathname === '/' ? 'active' : ''}`}>
             <Link href="/">Home</Link>
