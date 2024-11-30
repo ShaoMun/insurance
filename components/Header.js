@@ -17,14 +17,29 @@ export default function Header() {
           <li className={`navItem ${router.pathname === '/' ? 'active' : ''}`}>
             <Link href="/">Home</Link>
           </li>
-          <li className={`navItem ${router.pathname === '/buy-insurance' ? 'active' : ''}`}>
-            <Link href="/buy-insurance">Buy Insurance</Link>
-          </li>
-          <li className={`navItem ${router.pathname === '/claim-insurance' ? 'active' : ''}`}>
-            <Link href="/claim-insurance">Claim Insurance</Link>
+          <li 
+            className={`navItem dropdown ${
+              ['/buy-insurance', '/claim-insurance'].includes(router.pathname) ? 'active' : ''
+            }`}
+          >
+            <span>Services</span>
+            <ul className="dropdown-menu">
+              <li>
+                <Link href="/buy-insurance">Buy Insurance</Link>
+              </li>
+              <li>
+                <Link href="/claim-insurance">Claim Insurance</Link>
+              </li>
+            </ul>
           </li>
           <li className={`navItem ${router.pathname === '/dashboard' ? 'active' : ''}`}>
             <Link href="/dashboard">Dashboard</Link>
+          </li>
+          <li className={`navItem ${router.pathname === '/dao' ? 'active' : ''}`}>
+            <Link href="/dao">DAO</Link>
+          </li>
+          <li className={`navItem ${router.pathname === '/stake' ? 'active' : ''}`}>
+            <Link href="/stake">Stake</Link>
           </li>
         </ul>
       </nav>

@@ -30,7 +30,8 @@
     padding: 0;
     display: flex;
     justify-content: center;
-    gap: 20px;
+    align-items: center;
+    gap: 30px;
   }
   
   .navItem {
@@ -134,5 +135,126 @@
   
   .connectButton:active {
     transform: translateY(1px);
+  }
+  
+  /* Update dropdown styles for correct positioning and hover behavior */
+  .dropdown {
+    position: relative;
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
+  
+  .dropdown > span {
+    cursor: pointer;
+    color: #fff;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  /* Create a hover gap */
+  .dropdown::after {
+    content: '';
+    position: absolute;
+    height: 20px;
+    width: 120%;  /* Wider than the dropdown to ensure easy hovering */
+    bottom: -20px;
+    left: -10%;
+  }
+  
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1d1d1d;
+    border-radius: 12px;
+    padding: 6px;
+    min-width: 100px;
+    list-style: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    margin-top: 8px;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.2s ease-out;
+  }
+  
+  /* Show dropdown on hover */
+  .dropdown:hover .dropdown-menu {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  .dropdown-menu li {
+    text-align: center;
+    padding: 12px 16px;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    margin: 4px 0;
+  }
+  
+  .dropdown-menu li:hover {
+    background: rgba(28, 137, 253, 0.1);
+  }
+  
+  .dropdown-menu a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    white-space: nowrap;
+    font-size: 16px;
+  }
+  
+  .dropdown > span::after {
+    content: '▾';
+    margin-left: 6px;
+    font-size: 14px;
+    transition: transform 0.2s ease;
+  }
+  
+  .dropdown:hover > span::after {
+    transform: rotate(180deg);
+  }
+  
+  /* Remove underline from dropdown span */
+  .dropdown > span::after {
+    content: '▾';
+    margin-left: 6px;
+    font-size: 14px;
+    transition: transform 0.2s ease;
+  }
+  
+  /* Remove the underline animation for dropdown */
+  .dropdown > span::before {
+    display: none;
+  }
+  
+  .navItem.dropdown.active > span::after {
+    display: none;
+  }
+  
+  /* Keep underline only for non-dropdown nav items */
+  .navItem:not(.dropdown) a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: #1c89fd;
+    transform: scaleX(0);
+    transition: transform 0.21s ease;
+  }
+  
+  .navItem:not(.dropdown):hover a::after {
+    transform: scaleX(1);
+  }
+  
+  .navItem:not(.dropdown).active a::after {
+    transform: scaleX(1);
   }
   

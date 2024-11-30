@@ -93,16 +93,23 @@
   background: rgba(28, 137, 253, 0.05);
   border-radius: 24px;
   padding: 2rem;
-  border: 1px solid rgba(28, 137, 253, 0.3);
-  box-shadow: 
-    0 0 20px rgba(28, 137, 253, 0.2),
-    0 0 40px rgba(28, 137, 253, 0.1),
-    inset 0 0 20px rgba(28, 137, 253, 0.1);
-  position: relative;
   height: 100%;
+  border: 1px solid rgba(28, 137, 253, 0.6);
   box-shadow: 
-    0 0 20px rgba(28, 137, 253, 0.2),
-    inset 0 0 20px rgba(28, 137, 253, 0.1);
+    0 0 40px rgba(28, 137, 253, 0.4),
+    0 0 80px rgba(28, 137, 253, 0.2),
+    inset 0 0 40px rgba(28, 137, 253, 0.2);
+  position: relative;
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}
+
+/* Optional: We can still add a subtle hover effect */
+.pool-dao-overview:hover {
+  box-shadow: 
+    0 0 50px rgba(28, 137, 253, 0.5),
+    0 0 100px rgba(28, 137, 253, 0.3),
+    inset 0 0 50px rgba(28, 137, 253, 0.25);
 }
 
 /* Pool Content */
@@ -140,6 +147,9 @@
 /* Staking Content */
 .staking-content {
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .staking-stats {
@@ -305,15 +315,18 @@
   border: 1px solid rgba(28, 137, 253, 0.3);
   transition: all 0.3s ease;
   box-shadow: 
-    0 0 15px rgba(28, 137, 253, 0.15),
-    inset 0 0 15px rgba(28, 137, 253, 0.05);
+    0 0 20px rgba(28, 137, 253, 0.2),
+    0 0 40px rgba(28, 137, 253, 0.1),
+    inset 0 0 20px rgba(28, 137, 253, 0.1);
+  position: relative;
+  animation: borderPulse 3s infinite;
 }
 
 .claim-card:hover {
-  border-color: rgba(28, 137, 253, 0.5);
+  border-color: rgba(28, 137, 253, 0.6);
   box-shadow: 
-    0 0 25px rgba(28, 137, 253, 0.25),
-    inset 0 0 25px rgba(28, 137, 253, 0.1);
+    0 0 30px rgba(28, 137, 253, 0.3),
+    inset 0 0 15px rgba(28, 137, 253, 0.15);
   transform: translateY(-2px);
 }
 
@@ -524,9 +537,10 @@
 
 /* Action Buttons */
 .stake-action {
+  margin-top: 2rem;
   background: linear-gradient(135deg, #1c89fd, #093d7a);
   border: none;
-  padding: 1rem 2rem;
+  padding: 1rem 3rem;
   border-radius: 12px;
   color: #ffffff;
   cursor: pointer;
@@ -538,6 +552,7 @@
   box-shadow: 
     0 0 20px rgba(28, 137, 253, 0.2),
     inset 0 0 10px rgba(28, 137, 253, 0.1);
+  border: 1px solid rgba(28, 137, 253, 0.5);
 }
 
 .stake-action::before {
@@ -560,8 +575,8 @@
   transform: translateY(-2px);
   background: linear-gradient(135deg, #2196ff, #1c89fd);
   box-shadow: 
-    0 0 30px rgba(28, 137, 253, 0.3),
-    inset 0 0 15px rgba(28, 137, 253, 0.2);
+    0 0 30px rgba(28, 137, 253, 0.4),
+    inset 0 0 15px rgba(28, 137, 253, 0.3);
 }
 
 .stake-action:hover::before {
@@ -809,8 +824,7 @@
 
 /* Animated Border Glow */
 .insurance-card::after, 
-.pool-dao-overview::after, 
-.claim-card::after {
+.pool-dao-overview::after{
   content: '';
   position: absolute;
   top: -2px;
@@ -1030,4 +1044,53 @@
 .time-value {
   color: #fff;
   font-weight: 500;
+}
+
+/* Add neon border animation */
+@keyframes borderPulse {
+  0% {
+    border-color: rgba(28, 137, 253, 0.3);
+    box-shadow: 
+      0 0 20px rgba(28, 137, 253, 0.2),
+      0 0 40px rgba(28, 137, 253, 0.1),
+      inset 0 0 20px rgba(28, 137, 253, 0.1);
+  }
+  50% {
+    border-color: rgba(28, 137, 253, 0.6);
+    box-shadow: 
+      0 0 30px rgba(28, 137, 253, 0.4),
+      0 0 60px rgba(28, 137, 253, 0.2),
+      inset 0 0 30px rgba(28, 137, 253, 0.2);
+  }
+  100% {
+    border-color: rgba(28, 137, 253, 0.3);
+    box-shadow: 
+      0 0 20px rgba(28, 137, 253, 0.2),
+      0 0 40px rgba(28, 137, 253, 0.1),
+      inset 0 0 20px rgba(28, 137, 253, 0.1);
+  }
+}
+
+/* Update hover effects */
+.claim-card:hover {
+  border-color: rgba(28, 137, 253, 0.6);
+  box-shadow: 
+    0 0 30px rgba(28, 137, 253, 0.3),
+    inset 0 0 15px rgba(28, 137, 253, 0.15);
+  transform: translateY(-2px);
+}
+
+.pool-dao-overview:hover {
+  box-shadow: 
+    0 0 50px rgba(28, 137, 253, 0.5),
+    0 0 100px rgba(28, 137, 253, 0.3),
+    inset 0 0 50px rgba(28, 137, 253, 0.25);
+}
+
+.stake-action:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #2196ff, #1c89fd);
+  box-shadow: 
+    0 0 30px rgba(28, 137, 253, 0.4),
+    inset 0 0 15px rgba(28, 137, 253, 0.3);
 }
