@@ -1,7 +1,7 @@
 // utils/contracts.js
 
 import { ethers } from "ethers";
-import { poolABI, daoABI, iPoolABI } from "../constants/abi";
+import { poolABI, daoABI } from "../constants/abi";
 
 const poolAddress = "0xf60cD21e3235930511F43450B2E8AA1542fc2117";
 const daoAddress = "0x7c50CE48569f40158Ab19287B28297693CA2b9Df";
@@ -24,11 +24,3 @@ export function getDAOContract(providerOrSigner) {
   return new ethers.Contract(daoAddress, daoABI, providerOrSigner);
 }
 
-/**
- * Connect to the Pool contract using the IPool interface
- * @param {ethers.providers.Provider | ethers.Signer} providerOrSigner
- * @returns {ethers.Contract} IPool interface contract instance
- */
-export function getIPoolContract(providerOrSigner) {
-  return new ethers.Contract(poolAddress, iPoolABI, providerOrSigner);
-}
