@@ -265,21 +265,23 @@
       padding: 5px 10px;
     }
 
-    .logo img {
-      height: 50px;
-      width: 50px;
-      margin-left: 5px;
+    .menuButton {
+      order: -1; /* Ensure hamburger is first */
+      margin-right: 10px;
     }
 
     .nav {
       position: fixed;
-      top: 90px;
+      top: 0;
       left: -100%;
       width: 100%;
-      height: calc(100vh - 90px);
-      background: #000;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.95);
       transition: 0.3s ease;
       overflow-y: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .nav.active {
@@ -288,58 +290,68 @@
 
     .navList {
       flex-direction: column;
-      gap: 0;
-      padding: 20px 0;
+      gap: 20px;
+      width: 100%;
+      padding: 20px;
     }
 
     .navItem {
-      margin: 15px 0;
+      margin: 10px 0;
       width: 100%;
       text-align: center;
+    }
+
+    .dropdown {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .dropdown-menu {
       position: static;
       transform: none;
-      background: #111;
-      margin-top: 15px;
-      visibility: visible;
-      opacity: 1;
-      display: none;
+      background: transparent;
+      margin-top: 10px;
+      width: 100%;
+      max-width: 200px;
+      visibility: hidden;
+      opacity: 0;
+      height: 0;
+      transition: all 0.3s ease;
     }
 
     .dropdown:hover .dropdown-menu {
-      display: block;
+      visibility: visible;
+      opacity: 1;
+      height: auto;
     }
 
-    .dropdown::after {
-      display: none;
-    }
-
-    .connectButton {
-      padding: 8px 16px;
-      font-size: 14px;
-    }
-
-    /* Hamburger menu */
-    .menuButton {
-      display: block;
-      cursor: pointer;
+    .dropdown-menu li {
       padding: 10px;
+      margin: 5px 0;
+    }
+
+    /* Make hamburger more visible */
+    .menuButton {
+      z-index: 1001; /* Above the nav overlay */
     }
 
     .menuButton span {
-      display: block;
-      width: 25px;
+      width: 30px;
       height: 3px;
       background: #fff;
-      margin: 5px 0;
+      margin: 6px 0;
       transition: 0.3s;
+      display: block;
     }
 
-    /* Active state for hamburger */
+    .menuButton.active span {
+      background: #1c89fd; /* Change color when active */
+    }
+
+    /* Active state animations */
     .menuButton.active span:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
+      transform: rotate(45deg) translate(8px, 8px);
     }
 
     .menuButton.active span:nth-child(2) {
@@ -347,7 +359,7 @@
     }
 
     .menuButton.active span:nth-child(3) {
-      transform: rotate(-45deg) translate(7px, -6px);
+      transform: rotate(-45deg) translate(7px, -7px);
     }
   }
 

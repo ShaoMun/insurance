@@ -15,6 +15,14 @@ export default function Header() {
 
   return (
     <header className="header">
+      <div 
+        className={`menuButton ${isMenuOpen ? 'active' : ''}`}
+        onClick={toggleMenu}
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
       <div className="logo">
         <Link href="/">
           <Image 
@@ -25,14 +33,6 @@ export default function Header() {
             priority
           />
         </Link>
-      </div>
-      <div 
-        className={`menuButton ${isMenuOpen ? 'active' : ''}`}
-        onClick={toggleMenu}
-      >
-        <span></span>
-        <span></span>
-        <span></span>
       </div>
       <nav className={`nav ${isMenuOpen ? 'active' : ''}`}>
         <ul className="navList">
