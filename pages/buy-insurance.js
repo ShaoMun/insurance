@@ -131,7 +131,7 @@ export default function BuyInsurance() {
       
       // Refresh balance
       fetchBalance(account);
-    } catch (err) {
+    } catch {
       console.error("Error occurred");
     } finally {
       setLoading(null);
