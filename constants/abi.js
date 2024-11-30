@@ -1,6 +1,11 @@
 // constants/abi.js
 export const poolABI = [
     {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
       "anonymous": false,
       "inputs": [
         {
@@ -33,19 +38,6 @@ export const poolABI = [
           "internalType": "uint256",
           "name": "claimId",
           "type": "uint256"
-        }
-      ],
-      "name": "ClaimCancelled",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "claimId",
-          "type": "uint256"
         },
         {
           "indexed": true,
@@ -64,6 +56,12 @@ export const poolABI = [
           "internalType": "uint256",
           "name": "unlockTime",
           "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "evidenceURI",
+          "type": "string"
         }
       ],
       "name": "ClaimInitiated",
@@ -96,6 +94,12 @@ export const poolABI = [
           "internalType": "uint256",
           "name": "amount",
           "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "coverage",
+          "type": "uint256"
         }
       ],
       "name": "PremiumPaid",
@@ -107,7 +111,32 @@ export const poolABI = [
         {
           "indexed": true,
           "internalType": "address",
-          "name": "staker",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "lockDuration",
+          "type": "uint256"
+        }
+      ],
+      "name": "StakeDeposited",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
           "type": "address"
         },
         {
@@ -119,7 +148,7 @@ export const poolABI = [
         {
           "indexed": false,
           "internalType": "bool",
-          "name": "interestEarned",
+          "name": "withInterest",
           "type": "bool"
         }
       ],
@@ -127,117 +156,8 @@ export const poolABI = [
       "type": "event"
     },
     {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "staker",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "lockTime",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "duration",
-          "type": "uint256"
-        }
-      ],
-      "name": "TokensStaked",
-      "type": "event"
-    },
-    {
       "inputs": [],
-      "name": "CLAIM_TIME_LOCK",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "ONE_MONTH",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "ONE_MONTH_RATE",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "ONE_YEAR",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "ONE_YEAR_RATE",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "SIX_MONTHS",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "SIX_MONTHS_RATE",
+      "name": "TIMELOCK_DURATION",
       "outputs": [
         {
           "internalType": "uint256",
@@ -256,20 +176,7 @@ export const poolABI = [
           "type": "uint256"
         }
       ],
-      "name": "approveClaim",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "claimId",
-          "type": "uint256"
-        }
-      ],
-      "name": "cancelClaim",
+      "name": "approveClaimByDAO",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -318,6 +225,11 @@ export const poolABI = [
           "type": "uint8"
         },
         {
+          "internalType": "string",
+          "name": "evidenceURI",
+          "type": "string"
+        },
+        {
           "internalType": "bool",
           "name": "exists",
           "type": "bool"
@@ -327,74 +239,59 @@ export const poolABI = [
       "type": "function"
     },
     {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "duration",
-          "type": "uint256"
-        }
-      ],
-      "name": "getInterestRate",
+      "inputs": [],
+      "name": "dao",
       "outputs": [
         {
-          "internalType": "uint256",
+          "internalType": "contract DAO",
           "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "pure",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "claimant",
           "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
         }
       ],
-      "name": "initiateClaim",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "nonpayable",
+      "stateMutability": "view",
       "type": "function"
     },
     {
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "amount",
+          "name": "planId",
           "type": "uint256"
         }
       ],
       "name": "payPremium",
       "outputs": [],
-      "stateMutability": "nonpayable",
+      "stateMutability": "payable",
       "type": "function"
     },
     {
       "inputs": [
         {
-          "internalType": "address",
+          "internalType": "uint256",
           "name": "",
-          "type": "address"
+          "type": "uint256"
         }
       ],
-      "name": "premiumsPaid",
+      "name": "plans",
       "outputs": [
         {
           "internalType": "uint256",
-          "name": "",
+          "name": "id",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "premium",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "coverageAmount",
           "type": "uint256"
         }
       ],
@@ -409,7 +306,20 @@ export const poolABI = [
           "type": "uint256"
         }
       ],
-      "name": "rejectClaim",
+      "name": "rejectClaimByDAO",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_daoAddress",
+          "type": "address"
+        }
+      ],
+      "name": "setDAO",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -418,18 +328,13 @@ export const poolABI = [
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
           "name": "duration",
           "type": "uint256"
         }
       ],
-      "name": "stakeTokens",
+      "name": "stake",
       "outputs": [],
-      "stateMutability": "nonpayable",
+      "stateMutability": "payable",
       "type": "function"
     },
     {
@@ -449,12 +354,53 @@ export const poolABI = [
         },
         {
           "internalType": "uint256",
-          "name": "lastStakeTime",
+          "name": "stakingTime",
           "type": "uint256"
         },
         {
           "internalType": "uint256",
           "name": "lockDuration",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "unlockTime",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "evidenceURI",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "aiConfidence",
+          "type": "uint256"
+        }
+      ],
+      "name": "submitClaim",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalAppealFees",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
           "type": "uint256"
         }
       ],
@@ -488,25 +434,47 @@ export const poolABI = [
       "type": "function"
     },
     {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "amount",
-          "type": "uint256"
-        }
-      ],
-      "name": "withdrawStake",
+      "inputs": [],
+      "name": "unstake",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "users",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "totalPremiumPaid",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "coverage",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "stateMutability": "payable",
+      "type": "receive"
     }
   ];
 export const daoABI = [
     {
       "inputs": [
         {
-          "internalType": "address",
-          "name": "_poolContract",
+          "internalType": "address payable",
+          "name": "_poolAddress",
           "type": "address"
         }
       ],
@@ -517,13 +485,25 @@ export const daoABI = [
       "anonymous": false,
       "inputs": [
         {
-          "indexed": false,
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "claimId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
           "internalType": "address",
-          "name": "newAIProcessor",
+          "name": "appellant",
           "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "appealFee",
+          "type": "uint256"
         }
       ],
-      "name": "AIProcessorUpdated",
+      "name": "AppealSubmitted",
       "type": "event"
     },
     {
@@ -531,46 +511,33 @@ export const daoABI = [
       "inputs": [
         {
           "indexed": true,
-          "internalType": "address",
-          "name": "member",
-          "type": "address"
-        },
-        {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "premiumWeight",
-          "type": "uint256"
-        }
-      ],
-      "name": "MemberJoined",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "uint256",
-          "name": "proposalId",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
           "internalType": "uint256",
           "name": "claimId",
           "type": "uint256"
         },
         {
           "indexed": false,
-          "internalType": "address",
-          "name": "proposer",
-          "type": "address"
+          "internalType": "string",
+          "name": "evidenceURI",
+          "type": "string"
         },
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "endTime",
+          "name": "aiConfidence",
           "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "isAppeal",
+          "type": "bool"
         }
       ],
       "name": "ProposalCreated",
@@ -582,7 +549,7 @@ export const daoABI = [
         {
           "indexed": true,
           "internalType": "uint256",
-          "name": "proposalId",
+          "name": "claimId",
           "type": "uint256"
         },
         {
@@ -590,6 +557,18 @@ export const daoABI = [
           "internalType": "bool",
           "name": "approved",
           "type": "bool"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "finalYesVotes",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "finalNoVotes",
+          "type": "uint256"
         }
       ],
       "name": "ProposalExecuted",
@@ -599,22 +578,9 @@ export const daoABI = [
       "anonymous": false,
       "inputs": [
         {
-          "indexed": false,
-          "internalType": "uint256",
-          "name": "newFee",
-          "type": "uint256"
-        }
-      ],
-      "name": "ProposalFeeUpdated",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
           "indexed": true,
           "internalType": "uint256",
-          "name": "proposalId",
+          "name": "claimId",
           "type": "uint256"
         },
         {
@@ -626,27 +592,111 @@ export const daoABI = [
         {
           "indexed": false,
           "internalType": "bool",
-          "name": "support",
+          "name": "vote",
           "type": "bool"
         },
         {
           "indexed": false,
           "internalType": "uint256",
-          "name": "weight",
+          "name": "votingPower",
           "type": "uint256"
         }
       ],
-      "name": "VoteCast",
+      "name": "VoteSubmitted",
       "type": "event"
     },
     {
       "inputs": [],
-      "name": "aiProcessor",
+      "name": "AI_APPROVAL_THRESHOLD",
       "outputs": [
         {
-          "internalType": "address",
+          "internalType": "uint256",
           "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "QUORUM_PERCENTAGE",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "TIMELOCK_DURATION",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "VOTING_DURATION",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "activeProposalCount",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "appealFee",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "user",
           "type": "address"
+        }
+      ],
+      "name": "calculateVotingPower",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
         }
       ],
       "stateMutability": "view",
@@ -656,7 +706,30 @@ export const daoABI = [
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "proposalId",
+          "name": "claimId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "evidenceURI",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "aiConfidence",
+          "type": "uint256"
+        }
+      ],
+      "name": "createProposal",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "claimId",
           "type": "uint256"
         }
       ],
@@ -667,106 +740,12 @@ export const daoABI = [
     },
     {
       "inputs": [],
-      "name": "getTotalVotingWeight",
+      "name": "pool",
       "outputs": [
         {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "member",
-          "type": "address"
-        },
-        {
-          "internalType": "uint256",
-          "name": "premiumWeight",
-          "type": "uint256"
-        }
-      ],
-      "name": "joinDAO",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
+          "internalType": "contract Pool",
           "name": "",
           "type": "address"
-        }
-      ],
-      "name": "members",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "premiumWeight",
-          "type": "uint256"
-        },
-        {
-          "internalType": "bool",
-          "name": "isMember",
-          "type": "bool"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "minimumQuorum",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "poolContract",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "proposalCounter",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "proposalFee",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
         }
       ],
       "stateMutability": "view",
@@ -783,71 +762,52 @@ export const daoABI = [
       "name": "proposals",
       "outputs": [
         {
-          "internalType": "uint256",
-          "name": "claimId",
-          "type": "uint256"
-        },
-        {
           "internalType": "int256",
           "name": "totalVotes",
           "type": "int256"
         },
         {
+          "internalType": "bool",
+          "name": "exists",
+          "type": "bool"
+        },
+        {
           "internalType": "uint256",
-          "name": "endTime",
+          "name": "aiConfidence",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "evidenceURI",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "yesVotes",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "noVotes",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "timestamp",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "timelockEnd",
           "type": "uint256"
         },
         {
           "internalType": "bool",
-          "name": "executed",
+          "name": "isAppealProposal",
           "type": "bool"
-        },
-        {
-          "internalType": "address",
-          "name": "proposer",
-          "type": "address"
         }
       ],
       "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "claimId",
-          "type": "uint256"
-        }
-      ],
-      "name": "proposeClaimAI",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "claimId",
-          "type": "uint256"
-        }
-      ],
-      "name": "proposeClaimManual",
-      "outputs": [],
-      "stateMutability": "payable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "newAIProcessor",
-          "type": "address"
-        }
-      ],
-      "name": "setAIProcessor",
-      "outputs": [],
-      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -858,7 +818,7 @@ export const daoABI = [
           "type": "uint256"
         }
       ],
-      "name": "updateProposalFee",
+      "name": "setAppealFee",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -867,78 +827,45 @@ export const daoABI = [
       "inputs": [
         {
           "internalType": "uint256",
-          "name": "proposalId",
+          "name": "claimId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "string",
+          "name": "evidenceURI",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "aiConfidence",
+          "type": "uint256"
+        }
+      ],
+      "name": "submitAppeal",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "claimId",
           "type": "uint256"
         },
         {
           "internalType": "bool",
-          "name": "support",
+          "name": "vote",
           "type": "bool"
         }
       ],
-      "name": "vote",
+      "name": "submitVote",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
     },
     {
-      "inputs": [],
-      "name": "votingDuration",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    }
-  ];
-export const iPoolABI = [
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "claimId",
-          "type": "uint256"
-        }
-      ],
-      "name": "approveClaim",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "user",
-          "type": "address"
-        }
-      ],
-      "name": "getStakeWeight",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "claimId",
-          "type": "uint256"
-        }
-      ],
-      "name": "rejectClaim",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
+      "stateMutability": "payable",
+      "type": "receive"
     }
   ];

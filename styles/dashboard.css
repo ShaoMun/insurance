@@ -1012,3 +1012,22 @@
     box-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
   }
 }
+
+.time-remaining {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.time-label {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.time-value {
+  color: #fff;
+  font-weight: 500;
+}

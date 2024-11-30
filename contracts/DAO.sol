@@ -1,161 +1,194 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-interface IPool {
-    function approveClaim(uint256 claimId) external;
-    function rejectClaim(uint256 claimId) external;
-    function getStakeWeight(address user) external view returns (uint256);
-}
+import "./Pool.sol";
 
 contract DAO {
-    struct Member {
-        uint256 premiumWeight; // Voting weight based on premiums paid
-        bool isMember;
-    }
-
+    Pool public immutable pool;
+    
     struct Proposal {
-        uint256 claimId;
-        int256 totalVotes; // Sum of positive (YES) and negative (NO) votes
-        uint256 endTime;
-        bool executed;
-        address proposer; // Address that created the proposal
+        int256 totalVotes;
+        bool exists;
+        uint256 aiConfidence;
+        string evidenceURI;
+        uint256 yesVotes;
+        uint256 noVotes;
+        uint256 timestamp;
+        uint256 timelockEnd;
+        bool isAppealProposal;
+        mapping(address => bool) hasVoted;
     }
 
-    mapping(address => Member) public members; // DAO members
-    mapping(uint256 => Proposal) public proposals; // Track proposals
-    uint256 public proposalCounter;
-    uint256 public minimumQuorum = 20; // Minimum quorum percentage
-    uint256 public votingDuration = 3 days; // Duration for voting
-    uint256 public proposalFee = 0.01 ether; // Fee for manually proposing a claim
+    uint256 public activeProposalCount;
+    mapping(uint256 => Proposal) public proposals;
+    
+    uint256 public constant VOTING_DURATION = 3 days;
+    uint256 public constant TIMELOCK_DURATION = 2 days;
+    uint256 public constant QUORUM_PERCENTAGE = 51;
+    uint256 public constant AI_APPROVAL_THRESHOLD = 60;
+    uint256 public appealFee = 0.1 ether;
 
-    address public poolContract; // Address of the Insurance Pool contract
-    address public aiProcessor; // Authorized AI processor address
+    event ProposalCreated(
+        uint256 indexed claimId,
+        string evidenceURI,
+        uint256 aiConfidence,
+        uint256 timestamp,
+        bool isAppeal
+    );
+    
+    event AppealSubmitted(
+        uint256 indexed claimId,
+        address indexed appellant,
+        uint256 appealFee
+    );
 
-    // Events
-    event MemberJoined(address indexed member, uint256 premiumWeight);
-    event ProposalCreated(uint256 indexed proposalId, uint256 claimId, address proposer, uint256 endTime);
-    event VoteCast(uint256 indexed proposalId, address indexed voter, bool support, uint256 weight);
-    event ProposalExecuted(uint256 indexed proposalId, bool approved);
-    event AIProcessorUpdated(address newAIProcessor);
-    event ProposalFeeUpdated(uint256 newFee);
+    event VoteSubmitted(
+        uint256 indexed claimId,
+        address indexed voter,
+        bool vote,
+        uint256 votingPower
+    );
+    
+    event ProposalExecuted(
+        uint256 indexed claimId,
+        bool approved,
+        uint256 finalYesVotes,
+        uint256 finalNoVotes
+    );
 
-    // Modifiers
-    modifier onlyMember() {
-        require(members[msg.sender].isMember, "Only DAO members can perform this action");
-        _;
+    constructor(address payable _poolAddress) {
+        pool = Pool(_poolAddress);
     }
 
-    modifier onlyAIProcessor() {
-        require(msg.sender == aiProcessor, "Only the AI processor can perform this action");
-        _;
+    function createProposal(
+        uint256 claimId,
+        string memory evidenceURI,
+        uint256 aiConfidence
+    ) external {
+        require(msg.sender == address(pool), "Only pool can create proposals");
+        require(!proposals[claimId].exists, "Proposal already exists");
+        require(aiConfidence >= AI_APPROVAL_THRESHOLD, "AI confidence too low");
+
+        activeProposalCount++;
+
+        Proposal storage newProposal = proposals[claimId];
+        newProposal.exists = true;
+        newProposal.aiConfidence = aiConfidence;
+        newProposal.evidenceURI = evidenceURI;
+        newProposal.timestamp = block.timestamp;
+        newProposal.timelockEnd = block.timestamp + TIMELOCK_DURATION;
+        newProposal.isAppealProposal = false;
+
+        emit ProposalCreated(
+            claimId,
+            evidenceURI,
+            aiConfidence,
+            block.timestamp,
+            false
+        );
     }
 
-    constructor(address _poolContract) {
-        poolContract = _poolContract;
-        aiProcessor = msg.sender; // Initially set the deployer as the AI processor
+    function submitAppeal(
+        uint256 claimId,
+        string memory evidenceURI,
+        uint256 aiConfidence
+    ) external payable {
+        require(!proposals[claimId].exists, "Proposal already exists");
+        require(aiConfidence < AI_APPROVAL_THRESHOLD, "AI confidence too high");
+        require(msg.value >= appealFee, "Insufficient appeal fee");
+
+        (bool success, ) = address(pool).call{value: msg.value}("");
+        require(success, "Fee transfer failed");
+
+        activeProposalCount++;
+
+        Proposal storage newProposal = proposals[claimId];
+        newProposal.exists = true;
+        newProposal.aiConfidence = aiConfidence;
+        newProposal.evidenceURI = evidenceURI;
+        newProposal.timestamp = block.timestamp;
+        newProposal.timelockEnd = block.timestamp + TIMELOCK_DURATION;
+        newProposal.isAppealProposal = true;
+
+        emit AppealSubmitted(claimId, msg.sender, msg.value);
+        emit ProposalCreated(
+            claimId,
+            evidenceURI,
+            aiConfidence,
+            block.timestamp,
+            true
+        );
     }
 
-    // Add a member to the DAO
-    function joinDAO(address member, uint256 premiumWeight) external {
-        require(!members[member].isMember, "Already a DAO member");
-        members[member] = Member({ premiumWeight: premiumWeight, isMember: true });
-        emit MemberJoined(member, premiumWeight);
-    }
-
-    // Propose a claim automatically after AI approval
-    function proposeClaimAI(uint256 claimId) external onlyAIProcessor {
-        proposalCounter++;
-        proposals[proposalCounter] = Proposal({
-            claimId: claimId,
-            totalVotes: 0,
-            endTime: block.timestamp + votingDuration,
-            executed: false,
-            proposer: msg.sender
-        });
-
-        emit ProposalCreated(proposalCounter, claimId, msg.sender, block.timestamp + votingDuration);
-    }
-
-    // Propose a claim manually by paying a fee
-    function proposeClaimManual(uint256 claimId) external payable onlyMember {
-        require(msg.value == proposalFee, "Incorrect proposal fee");
-
-        proposalCounter++;
-        proposals[proposalCounter] = Proposal({
-            claimId: claimId,
-            totalVotes: 0,
-            endTime: block.timestamp + votingDuration,
-            executed: false,
-            proposer: msg.sender
-        });
-
-        emit ProposalCreated(proposalCounter, claimId, msg.sender, block.timestamp + votingDuration);
-    }
-
-    // Vote on a proposal
-    function vote(uint256 proposalId, bool support) external onlyMember {
-        Proposal storage proposal = proposals[proposalId];
-        require(block.timestamp < proposal.endTime, "Voting period has ended");
-        require(!proposal.executed, "Proposal already executed");
-
-        uint256 premiumWeight = members[msg.sender].premiumWeight;
-        uint256 stakeWeight = IPool(poolContract).getStakeWeight(msg.sender);
-        uint256 totalWeight = premiumWeight + stakeWeight;
-
-        // Add or subtract weight based on the vote
-        if (support) {
-            proposal.totalVotes += int256(totalWeight);
-        } else {
-            proposal.totalVotes -= int256(totalWeight);
-        }
-
-        emit VoteCast(proposalId, msg.sender, support, totalWeight);
-    }
-
-    // Execute the proposal after voting ends
-    function executeProposal(uint256 proposalId) external {
-        Proposal storage proposal = proposals[proposalId];
-        require(block.timestamp >= proposal.endTime, "Voting period not ended");
-        require(!proposal.executed, "Proposal already executed");
-
-        // Ensure quorum is met
+    function submitVote(uint256 claimId, bool vote) external {
+        Proposal storage proposal = proposals[claimId];
+        require(proposal.exists, "Proposal does not exist");
+        require(!proposal.hasVoted[msg.sender], "Already voted");
         require(
-            uint256(proposal.totalVotes > 0 ? proposal.totalVotes : -proposal.totalVotes) >= (getTotalVotingWeight() * minimumQuorum) / 100,
-            "Quorum not reached"
+            block.timestamp <= proposal.timelockEnd,
+            "Timelock period ended"
         );
 
-        if (proposal.totalVotes > 0) {
-            // Approve the claim
-            IPool(poolContract).approveClaim(proposal.claimId);
+        uint256 votingPower = calculateVotingPower(msg.sender);
+        require(votingPower > 0, "No voting power");
+
+        if (vote) {
+            proposal.yesVotes += votingPower;
+            proposal.totalVotes += int256(votingPower);
         } else {
-            // Reject the claim
-            IPool(poolContract).rejectClaim(proposal.claimId);
+            proposal.noVotes += votingPower;
+            proposal.totalVotes -= int256(votingPower);
         }
 
-        proposal.executed = true;
-        emit ProposalExecuted(proposalId, proposal.totalVotes > 0);
+        proposal.hasVoted[msg.sender] = true;
+
+        emit VoteSubmitted(claimId, msg.sender, vote, votingPower);
     }
 
-    // Calculate the total voting weight
-    function getTotalVotingWeight() public view returns (uint256) {
-        uint256 totalWeight = 0;
-        for (uint256 i = 1; i <= proposalCounter; i++) {
-            if (!proposals[i].executed) {
-                totalWeight += uint256(proposals[i].totalVotes > 0 ? proposals[i].totalVotes : -proposals[i].totalVotes);
-            }
+    function executeProposal(uint256 claimId) public {
+        Proposal storage proposal = proposals[claimId];
+        require(proposal.exists, "Proposal does not exist");
+        require(block.timestamp >= proposal.timelockEnd, "Timelock not ended");
+
+        bool approved = proposal.totalVotes > 0 && 
+            isQuorumReached(proposal.yesVotes + proposal.noVotes);
+
+        if (approved) {
+            pool.approveClaimByDAO(claimId);
+        } else {
+            pool.rejectClaimByDAO(claimId);
         }
-        return totalWeight;
+
+        activeProposalCount--;
+        
+        emit ProposalExecuted(
+            claimId,
+            approved,
+            proposal.yesVotes,
+            proposal.noVotes
+        );
     }
 
-    // Update AI processor address
-    function setAIProcessor(address newAIProcessor) external onlyAIProcessor {
-        aiProcessor = newAIProcessor;
-        emit AIProcessorUpdated(newAIProcessor);
+    function calculateVotingPower(address user) public view returns (uint256) {
+        (uint256 premiumPaid, ) = pool.users(user);
+        (uint256 stakedAmount, , , ) = pool.stakers(user);
+        uint256 userContribution = premiumPaid + stakedAmount;
+        
+        uint256 totalPoolSize = pool.totalPremiums() + pool.totalStaked() + pool.totalAppealFees();
+        if (totalPoolSize == 0) return 0;
+        
+        return (userContribution * 100) / totalPoolSize;
     }
 
-    // Update proposal fee
-    function updateProposalFee(uint256 newFee) external onlyAIProcessor {
-        proposalFee = newFee;
-        emit ProposalFeeUpdated(newFee);
+    function isQuorumReached(uint256 totalVotes) internal view returns (bool) {
+        uint256 totalPossibleVotes = pool.totalPremiums() + pool.totalStaked();
+        return totalVotes * 100 >= totalPossibleVotes * QUORUM_PERCENTAGE;
     }
+
+    function setAppealFee(uint256 newFee) external {
+        require(msg.sender == address(pool), "Only pool can set fee");
+        appealFee = newFee;
+    }
+
+    receive() external payable {}
 }

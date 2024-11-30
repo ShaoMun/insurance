@@ -3,8 +3,8 @@
 import { ethers } from "ethers";
 import { poolABI, daoABI, iPoolABI } from "../constants/abi";
 
-const poolAddress = "0x2A2120004Ba5D941724B4653A0c2A74b30691D32";
-const daoAddress = "0x9eCC37c7C971d4ad1816fC2F49FC73d84b3118F9";
+const poolAddress = "0xf60cD21e3235930511F43450B2E8AA1542fc2117";
+const daoAddress = "0x7c50CE48569f40158Ab19287B28297693CA2b9Df";
 
 /**
  * Connect to the Pool contract

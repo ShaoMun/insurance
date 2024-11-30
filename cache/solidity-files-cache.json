@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\Users\\hosha\\Desktop\\blockchainAsignment\\insurance\\contracts\\DAO.sol": {
-      "lastModificationDate": 1732818602452,
-      "contentHash": "8b79c35e6419c147639392c324924485",
+      "lastModificationDate": 1732907408862,
+      "contentHash": "d6f06c02b67334351de8b2865d3d1f48",
       "sourceName": "contracts/DAO.sol",
       "solcConfig": {
         "version": "0.8.0",
@@ -35,18 +35,19 @@
           }
         }
       },
-      "imports": [],
+      "imports": [
+        "./Pool.sol"
+      ],
       "versionPragmas": [
         "^0.8.0"
       ],
       "artifacts": [
-        "DAO",
-        "IPool"
+        "DAO"
       ]
     },
     "C:\\Users\\hosha\\Desktop\\blockchainAsignment\\insurance\\contracts\\Pool.sol": {
-      "lastModificationDate": 1732818477349,
-      "contentHash": "8ddb4a81b052ceebfb7d542f5560d143",
+      "lastModificationDate": 1732907436357,
+      "contentHash": "bdcac91208038428ad4ab31f24447fdd",
       "sourceName": "contracts/Pool.sol",
       "solcConfig": {
         "version": "0.8.0",
@@ -78,7 +79,9 @@
           }
         }
       },
-      "imports": [],
+      "imports": [
+        "./DAO.sol"
+      ],
       "versionPragmas": [
         "^0.8.0"
       ],

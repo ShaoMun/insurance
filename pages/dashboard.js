@@ -1,137 +1,165 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { ethers } from 'ethers';
+import { getPoolContract, getDAOContract } from "../utils/contracts";
 
 const Dashboard = () => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('pool');
   const [claimTab, setClaimTab] = useState('active');
-  
-  const dashboardData = {
+  const [dashboardData, setDashboardData] = useState({
+    userAddress: "",
     insurance: {
-      coverage: "5.5 ETH",
-      premium: "0.5 ETH",
-      nextPayment: "2024-04-01",
-      status: "Active"
+      coverage: "0 ETH",
+      premium: "0 ETH",
+      nextPayment: "-",
+      status: "Inactive"
     },
     poolAndDao: {
-      contribution: "2.5 ETH",
-      totalPoolSize: "150.5 ETH",
-      sharePercentage: "1.66%",
-      votingPower: "1.66%",
+      contribution: "0 ETH",
+      totalPoolSize: "0 ETH",
+      sharePercentage: "0%",
+      votingPower: "0%",
       staking: {
-        staked: "1.8 ETH",
-        apr: "12.5%",
-        rewards: "0.12 ETH",
-        nextReward: "0.03 ETH",
-        lockPeriod: "30 days"
+        staked: "0 ETH",
+        apr: "0%",
+        rewards: "0 ETH",
+        nextReward: "0 ETH",
+        lockPeriod: "0 days"
       },
       activeVotes: {
-        claims: 3,
-        proposals: 2
+        claims: 0,
+        proposals: 0
       }
     },
-    claims: [
-      {
-        id: "CLM-001",
-        type: "Accident",
-        amount: "1.5 ETH",
-        status: "Pending AI Review",
-        date: "2024-03-15",
-        aiConfidence: null,
-        description: "Car accident damage claim"
-      },
-      {
-        id: "CLM-002",
-        type: "Theft",
-        amount: "2.0 ETH",
-        status: "DAO Voting",
-        date: "2024-03-10",
-        aiConfidence: 75,
-        description: "Stolen items from vehicle",
-        votes: {
-          yes: 35,
-          no: 15,
-          votingEnds: "12 hours"
-        }
-      },
-      {
-        id: "CLM-003",
-        type: "Natural Disaster",
-        amount: "4.0 ETH",
-        status: "DAO Voting",
-        date: "2024-03-08",
-        aiConfidence: 45,
-        description: "Flood damage to property",
-        votes: {
-          yes: 12,
-          no: 28,
-          votingEnds: "6 hours"
-        }
-      },
-      {
-        id: "CLM-004",
-        type: "Accident",
-        amount: "1.2 ETH",
-        status: "Completed",
-        date: "2024-02-15",
-        aiConfidence: 85,
-        description: "Vehicle collision repair",
-        votes: {
-          yes: 45,
-          no: 5
-        },
-        result: "Approved",
-        payout: "1.2 ETH"
-      },
-      {
-        id: "CLM-005",
-        type: "Theft",
-        amount: "3.0 ETH",
-        status: "Rejected",
-        date: "2024-02-01",
-        aiConfidence: 35,
-        description: "Home burglary claim",
-        votes: {
-          yes: 10,
-          no: 40
-        },
-        reason: "Insufficient evidence provided"
-      },
-      {
-        id: "CLM-006",
-        type: "Natural Disaster",
-        amount: "2.5 ETH",
-        status: "Appeal",
-        date: "2024-01-25",
-        description: "Hurricane damage - under appeal",
-        isAppeal: true,
-        appealReason: "New evidence available",
-        originalClaim: {
-          aiConfidence: 60,
-          votes: {
-            yes: 20,
-            no: 30
+    claims: []
+  });
+
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      try {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const signer = await provider.getSigner();
+        const poolContract = getPoolContract(signer);
+        const daoContract = getDAOContract(signer);
+        const userAddress = await signer.getAddress();
+
+        // Fetch user's insurance data
+        const user = await poolContract.users(userAddress);
+        const coverage = ethers.formatEther(user.coverage);
+        const premium = ethers.formatEther(user.totalPremiumPaid);
+
+        // Fetch staking data
+        const staker = await poolContract.stakers(userAddress);
+        const stakedAmount = ethers.formatEther(staker.balance);
+        const lockDuration = Number(staker.lockDuration);
+        const unlockTime = Number(staker.unlockTime);
+        
+        // Calculate APR based on lock duration
+        let apr;
+        if (lockDuration === 30 * 24 * 60 * 60) apr = "0.3";
+        else if (lockDuration === 180 * 24 * 60 * 60) apr = "2.0";
+        else if (lockDuration === 365 * 24 * 60 * 60) apr = "5.0";
+        else apr = "0";
+
+        // Fetch pool and DAO data
+        const totalPremiums = await poolContract.totalPremiums();
+        const totalStaked = await poolContract.totalStaked();
+        const totalPoolSize = totalPremiums + totalStaked;
+        const votingPower = await daoContract.calculateVotingPower(userAddress);
+        
+        // Fetch claims
+        const claimCounter = await poolContract.claimCounter();
+        const claims = [];
+        
+        for(let i = 1; i <= claimCounter; i++) {
+          const claim = await poolContract.claims(i);
+          if(claim.exists) {
+            try {
+              const proposal = await daoContract.proposals(i);
+              
+              console.log("Claim claimant:", claim.claimant);
+              console.log("User address:", userAddress);
+              
+              claims.push({
+                id: `CLM-${i.toString().padStart(3, '0')}`,
+                type: "Insurance Claim",
+                amount: ethers.formatEther(claim.amount) + " ETH",
+                status: getClaimStatus(claim.status),
+                date: new Date(Number(claim.unlockTime) * 1000).toISOString().split('T')[0],
+                aiConfidence: Number(proposal.aiConfidence || 0),
+                description: "Claim #" + i,
+                claimant: claim.claimant,
+                submittedBy: claim.claimant,
+                votes: proposal.exists ? {
+                  yes: Number(proposal.yesVotes || 0),
+                  no: Number(proposal.noVotes || 0),
+                  votingEnds: getTimeRemaining(Number(proposal.timelockEnd))
+                } : null
+              });
+            } catch (error) {
+              console.error(`Error fetching proposal ${i}:`, error);
+            }
           }
         }
-      },
-      {
-        id: "CLM-007",
-        type: "Accident",
-        amount: "0.8 ETH",
-        status: "Completed",
-        date: "2024-01-15",
-        aiConfidence: 95,
-        description: "Minor collision repair",
-        votes: {
-          yes: 50,
-          no: 2
-        },
-        result: "Approved",
-        payout: "0.8 ETH"
+
+        // Get active proposals count
+        const activeProposalCount = await daoContract.activeProposalCount();
+
+        // Filter claims for the current user
+        const userClaims = claims.filter(claim => claim.claimant === userAddress);
+
+        // Update state with real data
+        setDashboardData({
+          userAddress,
+          insurance: {
+            coverage: coverage + " ETH",
+            premium: premium + " ETH",
+            nextPayment: "-",
+            status: coverage > 0 ? "Active" : "Inactive"
+          },
+          poolAndDao: {
+            contribution: (Number(premium) + Number(stakedAmount)).toFixed(2) + " ETH",
+            totalPoolSize: ethers.formatEther(totalPoolSize) + " ETH",
+            sharePercentage: ((Number(premium) + Number(stakedAmount)) / Number(ethers.formatEther(totalPoolSize)) * 100).toFixed(2) + "%",
+            votingPower: Number(votingPower).toFixed(2) + "%",
+            staking: {
+              staked: stakedAmount + " ETH",
+              apr: apr + "%",
+              rewards: "Calculating...",
+              nextReward: "Calculating...",
+              lockPeriod: (lockDuration / (24 * 60 * 60)) + " days"
+            },
+            activeVotes: {
+              claims: claims.filter(c => c.status === "DAO Voting").length,
+              proposals: Number(activeProposalCount)
+            }
+          },
+          claims: claims
+        });
+
+      } catch (error) {
+        console.error("Failed to fetch dashboard data:", error);
       }
-    ]
+    };
+
+    fetchDashboardData();
+  }, []);
+
+  // Helper function to get claim status string
+  const getClaimStatus = (statusCode) => {
+    const statuses = ["DAO Voting", "DAO Voting", "Claimed", "Rejected"];
+    return statuses[Number(statusCode)] || "Unknown";
+  };
+
+  // Helper function to get time remaining
+  const getTimeRemaining = (endTime) => {
+    const remaining = endTime - (Date.now() / 1000);
+    if (remaining <= 0) return "Ended";
+    const hours = Math.floor(remaining / 3600);
+    return `${hours} hours`;
   };
 
   const ClaimCard = ({ claim, isPast }) => {
@@ -162,7 +190,7 @@ const Dashboard = () => {
           </div>
         )}
 
-        {claim.votes && !claim.isAppeal && (
+        {claim.votes && (
           <div className="vote-stats">
             <div className="vote-bars">
               <div className="vote-bar">
@@ -171,7 +199,9 @@ const Dashboard = () => {
                   <div 
                     className="vote-fill yes"
                     style={{
-                      width: `${(claim.votes.yes / (claim.votes.yes + claim.votes.no)) * 100}%`
+                      width: `${claim.votes.yes + claim.votes.no > 0 
+                        ? (claim.votes.yes / (claim.votes.yes + claim.votes.no)) * 100 
+                        : 0}%`
                     }}
                   ></div>
                 </div>
@@ -183,12 +213,18 @@ const Dashboard = () => {
                   <div 
                     className="vote-fill no"
                     style={{
-                      width: `${(claim.votes.no / (claim.votes.yes + claim.votes.no)) * 100}%`
+                      width: `${claim.votes.yes + claim.votes.no > 0 
+                        ? (claim.votes.no / (claim.votes.yes + claim.votes.no)) * 100 
+                        : 0}%`
                     }}
                   ></div>
                 </div>
                 <span>{claim.votes.no}</span>
               </div>
+            </div>
+            <div className="time-remaining">
+              <span className="time-label">Time Remaining:</span>
+              <span className="time-value">{claim.votes.votingEnds}</span>
             </div>
           </div>
         )}
@@ -288,7 +324,12 @@ const Dashboard = () => {
                   <p>Rewards Earned</p>
                 </div>
               </div>
-              <button className="stake-action">Stake More</button>
+              <button 
+                className="stake-action"
+                onClick={() => router.push('/stake')}
+              >
+                Stake More
+              </button>
             </div>
           )}
 
@@ -311,7 +352,12 @@ const Dashboard = () => {
       <div className="claims-overview">
         <div className="claims-header">
           <h2>Claims</h2>
-          <button className="new-claim">+ New Claim</button>
+          <button 
+            className="new-claim"
+            onClick={() => router.push('/claim-insurance')}
+          >
+            + New Claim
+          </button>
         </div>
         
         <div className="claims-tabs">
@@ -330,22 +376,38 @@ const Dashboard = () => {
         </div>
 
         <div className="claims-grid">
-          {claimTab === 'active' ? (
-            // Active claims
-            dashboardData.claims.filter(claim => 
-              claim.status === 'Pending AI Review' || 
-              claim.status === 'DAO Voting'
-            ).map((claim) => (
-              <ClaimCard key={claim.id} claim={claim} isPast={false} />
-            ))
-          ) : (
-            // Past claims
-            dashboardData.claims.filter(claim => 
-              claim.status === 'Completed' || 
-              claim.status === 'Rejected'
-            ).map((claim) => (
-              <ClaimCard key={claim.id} claim={claim} isPast={true} />
-            ))
+          {Array.isArray(dashboardData.claims) && (
+            <>
+              {claimTab === 'active' ? (
+                // Active claims
+                dashboardData.claims
+                  .filter(claim => 
+                    claim.submittedBy.toLowerCase() === dashboardData.userAddress.toLowerCase() &&
+                    (claim.status === 'Timelock' || claim.status === 'DAO Voting')
+                  )
+                  .map((claim) => (
+                    <ClaimCard key={claim.id} claim={claim} isPast={false} />
+                  ))
+              ) : (
+                // Past claims
+                dashboardData.claims
+                  .filter(claim => 
+                    claim.submittedBy.toLowerCase() === dashboardData.userAddress.toLowerCase() &&
+                    (claim.status === 'Claimed' || claim.status === 'Rejected')
+                  )
+                  .map((claim) => (
+                    <ClaimCard key={claim.id} claim={claim} isPast={true} />
+                  ))
+              )}
+              {dashboardData.claims.length > 0 && 
+                !dashboardData.claims.some(claim => 
+                  claim.submittedBy.toLowerCase() === dashboardData.userAddress.toLowerCase()
+                ) && (
+                  <div className="no-claims">
+                    <p>You haven't submitted any claims yet</p>
+                  </div>
+                )}
+            </>
           )}
         </div>
       </div>

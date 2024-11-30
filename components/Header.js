@@ -1,46 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { ethers } from 'ethers'; // Import ethers.js for blockchain interaction
-import { useRouter } from 'next/router'; // Add this import
-import Link from 'next/link'; // Add this import for better navigation
+import React from 'react';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { useWallet } from '../context/WalletContext';
 
 export default function Header() {
-  const router = useRouter(); // Add this
-  const [account, setAccount] = useState(null); // Store connected wallet address
-  const [isConnected, setIsConnected] = useState(false); // Flag to check if wallet is connected
-
-  // Check if MetaMask is installed
-  const checkMetaMask = () => {
-    if (window.ethereum) {
-      return true;
-    } else {
-      alert("MetaMask not found! Please install MetaMask.");
-      return false;
-    }
-  };
-
-  // Connect to MetaMask
-  const handleConnectWallet = async () => {
-    if (!checkMetaMask()) return;
-
-    try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      await provider.send("eth_requestAccounts", []); // Request MetaMask accounts
-      const signer = await provider.getSigner();
-      const address = await signer.getAddress(); // Get wallet address
-      setAccount(address);
-      setIsConnected(true);
-      console.log("Connected with:", address);
-    } catch (error) {
-      console.error("Error connecting to MetaMask:", error);
-      alert("Failed to connect wallet.");
-    }
-  };
-
-  // Disconnect MetaMask wallet
-  const handleDisconnectWallet = () => {
-    setAccount(null);
-    setIsConnected(false);
-  };
+  const router = useRouter();
+  const { account, isConnected, connectWallet, disconnectWallet } = useWallet();
 
   return (
     <header className="header">
@@ -67,14 +32,14 @@ export default function Header() {
         {isConnected ? (
           <button 
             className="connectButton connected" 
-            onClick={handleDisconnectWallet}
+            onClick={disconnectWallet}
           >
             {account.slice(0, 6)}...{account.slice(-4)}
           </button>
         ) : (
           <button 
             className="connectButton" 
-            onClick={handleConnectWallet}
+            onClick={connectWallet}
           >
             Connect Wallet
           </button>
