@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { ethers } from 'ethers';
 import { getPoolContract, getDAOContract } from "../utils/contracts";
@@ -38,7 +38,7 @@ const Dashboard = () => {
   });
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
+    const fetchDashboardData = useCallback(async () => {
       try {
         const provider = new ethers.BrowserProvider(window.ethereum);
         const signer = await provider.getSigner();
@@ -108,7 +108,7 @@ const Dashboard = () => {
         const activeProposalCount = await daoContract.activeProposalCount();
 
         // Filter claims for the current user
-        const userClaims = claims.filter(claim => claim.claimant === userAddress);
+        const { otherData } = await contract.getUserData(account);
 
         // Update state with real data
         setDashboardData({
@@ -139,13 +139,13 @@ const Dashboard = () => {
           claims: claims
         });
 
-      } catch (error) {
+      } catch (_) {
         console.error("Failed to fetch dashboard data:", error);
       }
-    };
+    }, []);
 
     fetchDashboardData();
-  }, []);
+  }, [fetchDashboardData]);
 
   // Helper function to get claim status string
   const getClaimStatus = (statusCode) => {

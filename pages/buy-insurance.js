@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ethers } from "ethers";
 import { getPoolContract } from "../utils/contracts"; // Import utilities for Pool and DAO contracts
 
@@ -65,12 +65,7 @@ export default function BuyInsurance() {
   const [balance, setBalance] = useState(null);
   const [coverage, setCoverage] = useState(null);
 
-  useEffect(() => {
-    checkWalletConnection();
-    fetchUserCoverage();
-  }, [checkWalletConnection, fetchUserCoverage]);
-
-  const checkWalletConnection = async () => {
+  const checkWalletConnection = useCallback(async () => {
     if (typeof window.ethereum !== "undefined") {
       const accounts = await window.ethereum.request({
         method: "eth_accounts",
@@ -80,7 +75,7 @@ export default function BuyInsurance() {
         fetchBalance(accounts[0]);
       }
     }
-  };
+  }, []);
 
   const fetchBalance = async (address) => {
     try {
@@ -143,7 +138,7 @@ export default function BuyInsurance() {
     }
   };
   
-  const fetchUserCoverage = async () => {
+  const fetchUserCoverage = useCallback(async () => {
     if (!account) return;
     try {
       const provider = new ethers.BrowserProvider(window.ethereum);
@@ -153,7 +148,12 @@ export default function BuyInsurance() {
     } catch (err) {
       console.error("Failed to fetch coverage:", err);
     }
-  };
+  }, [account]);
+
+  useEffect(() => {
+    checkWalletConnection();
+    fetchUserCoverage();
+  }, [checkWalletConnection, fetchUserCoverage]);
 
   return (
     <div className="container">
