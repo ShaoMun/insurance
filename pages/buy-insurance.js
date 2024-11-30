@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { ethers } from "ethers";
-import { getPoolContract } from "../utils/contracts"; // Import utilities for Pool and DAO contracts
+import { getPoolContract, getDAOContract } from "../utils/contracts"; // Import utilities for Pool and DAO contracts
 
 const insurancePlans = [
   {
@@ -65,7 +65,14 @@ export default function BuyInsurance() {
   const [balance, setBalance] = useState(null);
   const [coverage, setCoverage] = useState(null);
 
-  const checkWalletConnection = useCallback(async () => {
+  useEffect(() => {
+    checkWalletConnection();
+    if (account) {
+      fetchUserCoverage();
+    }
+  }, [account]);
+
+  const checkWalletConnection = async () => {
     if (typeof window.ethereum !== "undefined") {
       const accounts = await window.ethereum.request({
         method: "eth_accounts",
@@ -75,7 +82,7 @@ export default function BuyInsurance() {
         fetchBalance(accounts[0]);
       }
     }
-  }, []);
+  };
 
   const fetchBalance = async (address) => {
     try {
@@ -125,35 +132,30 @@ export default function BuyInsurance() {
       await tx.wait();
   
       // Fetch updated user coverage
-      const { coverage: newCoverage } = await poolContract.getUserInsurance(account);
+      const [premiumPaid, userCoverage] = await poolContract.users(account);
       
-      setSuccess(`Successfully purchased ${plan.name}! Your coverage: ${ethers.formatEther(newCoverage)} ETH`);
+      setSuccess(`Successfully purchased ${plan.name}! Your coverage: ${ethers.formatEther(userCoverage)} ETH`);
       
       // Refresh balance
       fetchBalance(account);
-    } catch {
-      console.error("Error occurred");
+    } catch (err) {
+      setError(err.message || "Failed to process transaction");
     } finally {
       setLoading(null);
     }
   };
   
-  const fetchUserCoverage = useCallback(async () => {
+  const fetchUserCoverage = async () => {
     if (!account) return;
     try {
       const provider = new ethers.BrowserProvider(window.ethereum);
       const poolContract = getPoolContract(provider);
-      const { coverage } = await poolContract.getUserInsurance(account);
-      setCoverage(ethers.formatEther(coverage));
+      const [premiumPaid, userCoverage] = await poolContract.users(account);
+      setCoverage(ethers.formatEther(userCoverage));
     } catch (err) {
       console.error("Failed to fetch coverage:", err);
     }
-  }, [account]);
-
-  useEffect(() => {
-    checkWalletConnection();
-    fetchUserCoverage();
-  }, [checkWalletConnection, fetchUserCoverage]);
+  };
 
   return (
     <div className="container">
