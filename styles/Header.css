@@ -330,17 +330,25 @@
 
     /* Remove hover effects for mobile */
     .dropdown:hover .dropdown-menu {
+      display: none;
       visibility: hidden;
       opacity: 0;
-      height: 0;
-      display: none;
     }
 
-    .dropdown-menu.show {
+    /* Show dropdown only when open class is present */
+    .dropdown.open .dropdown-menu {
+      display: block;
       visibility: visible;
       opacity: 1;
+      position: static;
+      transform: none;
+      margin-top: 10px;
+      background: transparent;
       height: auto;
-      display: block;
+    }
+
+    .dropdown > span {
+      cursor: pointer;
     }
 
     .dropdown-menu li {
@@ -378,6 +386,37 @@
     .menuButton.active span:nth-child(3) {
       transform: rotate(-45deg) translate(7px, -7px);
     }
+
+    /* Fix dropdown overlay */
+    .dropdown.open .dropdown-menu {
+      display: block;
+      visibility: visible;
+      opacity: 1;
+      position: static;
+      transform: none;
+      margin-top: 10px;
+      background: transparent;
+      height: auto;
+    }
+
+    /* Add spacing for items below dropdown */
+    .dropdown.open + .navItem {
+      margin-top: 0px; /* Reduced from 80px */
+    }
+
+    /* Ensure smooth transition */
+    .navItem {
+      transition: margin-top 0.3s ease;
+    }
+
+    /* Fine-tune dropdown menu items spacing */
+    .dropdown-menu li {
+      margin: 5px 0; /* Reduced from 10px */
+    }
+
+    .dropdown.open .dropdown-menu {
+      margin-top: 5px; /* Reduced from 10px */
+    }
   }
 
   /* Smaller mobile devices */
@@ -389,6 +428,14 @@
 
     .connectButton.connected {
       font-size: 12px;
+    }
+  }
+  
+  /* Keep hover effects for desktop only */
+  @media screen and (min-width: 769px) {
+    .dropdown:hover .dropdown-menu {
+      visibility: visible;
+      opacity: 1;
     }
   }
   

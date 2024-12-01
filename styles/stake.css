@@ -192,6 +192,11 @@ h1 {
 }
 
 @media (max-width: 768px) {
+
+  .staking-container {
+    margin-top: 60px;
+  }
+
   .staking-info {
     grid-template-columns: 1fr;
   }
