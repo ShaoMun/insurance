@@ -318,12 +318,29 @@
       opacity: 0;
       height: 0;
       transition: all 0.3s ease;
+      display: none;
     }
 
-    .dropdown:hover .dropdown-menu {
+    .dropdown-menu.show {
       visibility: visible;
       opacity: 1;
       height: auto;
+      display: block;
+    }
+
+    /* Remove hover effects for mobile */
+    .dropdown:hover .dropdown-menu {
+      visibility: hidden;
+      opacity: 0;
+      height: 0;
+      display: none;
+    }
+
+    .dropdown-menu.show {
+      visibility: visible;
+      opacity: 1;
+      height: auto;
+      display: block;
     }
 
     .dropdown-menu li {

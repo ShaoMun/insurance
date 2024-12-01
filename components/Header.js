@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -8,9 +8,29 @@ export default function Header() {
   const router = useRouter();
   const { account, isConnected, connectWallet, disconnectWallet } = useWallet();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  // Close menu when route changes
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setIsMenuOpen(false);
+      setIsDropdownOpen(false);
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router]);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const toggleDropdown = (e) => {
+    e.preventDefault();
+    setIsDropdownOpen(!isDropdownOpen);
   };
 
   return (
@@ -44,8 +64,8 @@ export default function Header() {
               ['/buy-insurance', '/claim-insurance'].includes(router.pathname) ? 'active' : ''
             }`}
           >
-            <span>Services</span>
-            <ul className="dropdown-menu">
+            <span onClick={toggleDropdown}>Services ▾</span>
+            <ul className={`dropdown-menu ${isDropdownOpen ? 'show' : ''}`}>
               <li>
                 <Link href="/buy-insurance">Buy Insurance</Link>
               </li>
