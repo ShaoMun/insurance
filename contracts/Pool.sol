@@ -53,6 +53,52 @@ contract Pool {
     event StakeDeposited(address indexed user, uint256 amount, uint256 lockDuration);
     event StakeWithdrawn(address indexed user, uint256 amount, bool withInterest);
 
+    modifier onlyDAO() {
+        require(msg.sender == address(dao), "Only DAO can call this function");
+        _;
+    }
+
+    modifier onlyStaker() {
+        require(stakers[msg.sender].balance > 0, "Not a staker");
+        _;
+    }
+
+    modifier onlyInsured() {
+        require(users[msg.sender].totalPremiumPaid > 0, "Not insured");
+        _;
+    }
+
+    modifier hasNotStaked() {
+        require(stakers[msg.sender].balance == 0, "Already staked");
+        _;
+    }
+
+    modifier hasNotBoughtInsurance() {
+        require(users[msg.sender].totalPremiumPaid == 0, "Already insured");
+        _;
+    }
+
+    modifier validStakingPeriod(uint256 period) {
+        require(
+            period == 30 days || period == 90 days || period == 180 days,
+            "Invalid staking period"
+        );
+        _;
+    }
+
+    modifier stakingPeriodEnded() {
+        require(
+            block.timestamp >= stakers[msg.sender].unlockTime,
+            "Staking period not ended"
+        );
+        _;
+    }
+
+    modifier validClaimAmount(uint256 amount) {
+        require(amount <= users[msg.sender].coverage, "Amount exceeds coverage");
+        _;
+    }
+
     constructor() {
         _addPlan("Basic Shield", 0.01 ether, 5 ether);
         _addPlan("Premium Guard", 0.02 ether, 10 ether);
@@ -129,7 +175,7 @@ contract Pool {
         emit ClaimRejected(claimId);
     }
 
-    function stake(uint256 duration) external payable {
+    function stake(uint256 duration) external payable hasNotStaked validStakingPeriod(duration) {
         require(msg.value > 0, "Must stake something");
         require(
             duration == 30 days || 
@@ -147,7 +193,7 @@ contract Pool {
         emit StakeDeposited(msg.sender, msg.value, duration);
     }
 
-    function unstake() external {
+    function unstake() external onlyStaker stakingPeriodEnded {
         Staker storage staker = stakers[msg.sender];
         require(staker.balance > 0, "No stake to withdraw");
         

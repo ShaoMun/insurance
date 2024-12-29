@@ -56,6 +56,44 @@ contract DAO {
         uint256 finalNoVotes
     );
 
+    modifier onlyPool() {
+        require(msg.sender == address(pool), "Only pool can call this function");
+        _;
+    }
+
+    modifier proposalExists(uint256 claimId) {
+        require(proposals[claimId].exists, "Proposal does not exist");
+        _;
+    }
+
+    modifier proposalDoesNotExist(uint256 claimId) {
+        require(!proposals[claimId].exists, "Proposal already exists");
+        _;
+    }
+
+    modifier hasNotVoted(uint256 claimId) {
+        require(!proposals[claimId].hasVoted[msg.sender], "Already voted");
+        _;
+    }
+
+    modifier withinTimelockPeriod(uint256 claimId) {
+        require(
+            block.timestamp <= proposals[claimId].timelockEnd,
+            "Timelock period ended"
+        );
+        _;
+    }
+
+    modifier timelockEnded(uint256 claimId) {
+        require(block.timestamp >= proposals[claimId].timelockEnd, "Timelock not ended");
+        _;
+    }
+
+    modifier hasVotingPower() {
+        require(calculateVotingPower(msg.sender) > 0, "No voting power");
+        _;
+    }
+
     constructor(address payable _poolAddress) {
         pool = Pool(_poolAddress);
     }
@@ -64,9 +102,7 @@ contract DAO {
         uint256 claimId,
         string memory evidenceURI,
         uint256 aiConfidence
-    ) external {
-        require(msg.sender == address(pool), "Only pool can create proposals");
-        require(!proposals[claimId].exists, "Proposal already exists");
+    ) external onlyPool proposalDoesNotExist(claimId) {
         require(aiConfidence >= AI_APPROVAL_THRESHOLD, "AI confidence too low");
 
         activeProposalCount++;
@@ -92,8 +128,7 @@ contract DAO {
         uint256 claimId,
         string memory evidenceURI,
         uint256 aiConfidence
-    ) external payable {
-        require(!proposals[claimId].exists, "Proposal already exists");
+    ) external payable proposalDoesNotExist(claimId) {
         require(aiConfidence < AI_APPROVAL_THRESHOLD, "AI confidence too high");
         require(msg.value >= appealFee, "Insufficient appeal fee");
 
@@ -120,14 +155,14 @@ contract DAO {
         );
     }
 
-    function submitVote(uint256 claimId, bool vote) external {
+    function submitVote(uint256 claimId, bool vote) external 
+        proposalExists(claimId)
+        hasNotVoted(claimId)
+        withinTimelockPeriod(claimId)
+        hasVotingPower 
+    {
         Proposal storage proposal = proposals[claimId];
-        require(proposal.exists, "Proposal does not exist");
         require(!proposal.hasVoted[msg.sender], "Already voted");
-        require(
-            block.timestamp <= proposal.timelockEnd,
-            "Timelock period ended"
-        );
 
         uint256 votingPower = calculateVotingPower(msg.sender);
         require(votingPower > 0, "No voting power");
@@ -145,10 +180,11 @@ contract DAO {
         emit VoteSubmitted(claimId, msg.sender, vote, votingPower);
     }
 
-    function executeProposal(uint256 claimId) public {
+    function executeProposal(uint256 claimId) public 
+        proposalExists(claimId)
+        timelockEnded(claimId) 
+    {
         Proposal storage proposal = proposals[claimId];
-        require(proposal.exists, "Proposal does not exist");
-        require(block.timestamp >= proposal.timelockEnd, "Timelock not ended");
 
         bool approved = proposal.totalVotes > 0 && 
             isQuorumReached(proposal.yesVotes + proposal.noVotes);
@@ -185,8 +221,7 @@ contract DAO {
         return totalVotes * 100 >= totalPossibleVotes * QUORUM_PERCENTAGE;
     }
 
-    function setAppealFee(uint256 newFee) external {
-        require(msg.sender == address(pool), "Only pool can set fee");
+    function setAppealFee(uint256 newFee) external onlyPool {
         appealFee = newFee;
     }
 
