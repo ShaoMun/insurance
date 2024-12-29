@@ -72,9 +72,15 @@ export default function ClaimInsurance() {
       
       console.log("Uploading to IPFS...");
       
-      // Create form data
+      // Create form data with timestamped file
       const formData = new FormData();
-      formData.append('file', files[0]);
+      const timestamp = Date.now();
+      const uniqueFile = new File(
+        [files[0]], 
+        `${timestamp}_${files[0].name}`, 
+        { type: files[0].type }
+      );
+      formData.append('file', uniqueFile);
 
       // Upload to Pinata with API keys
       const response = await axios.post(
@@ -83,8 +89,8 @@ export default function ClaimInsurance() {
         {
           headers: {
             'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
-            'pinata_api_key': process.env.NEXT_PUBLIC_PINATA_API_KEY,
-            'pinata_secret_api_key': process.env.NEXT_PUBLIC_PINATA_SECRET_KEY
+            'pinata_api_key': "a56aa2c467760358c3b6",
+            'pinata_secret_api_key': "8d52a885e3b37780dab64f36091d923e43d9b3aa7b3572ab0a519f6ed59c62e5"
           },
           maxContentLength: Infinity
         }
