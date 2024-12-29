@@ -89,8 +89,8 @@ export default function ClaimInsurance() {
         {
           headers: {
             'Content-Type': `multipart/form-data; boundary=${formData._boundary}`,
-            'pinata_api_key': "a56aa2c467760358c3b6",
-            'pinata_secret_api_key': "8d52a885e3b37780dab64f36091d923e43d9b3aa7b3572ab0a519f6ed59c62e5"
+            'pinata_api_key': "f9d5ea288c61593b972f",
+            'pinata_secret_api_key': "396531142ebcb7b22f6ca9fad69b8a6eaf6c6efeaa292926aa5feda8314561f3"
           },
           maxContentLength: Infinity
         }
