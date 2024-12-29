@@ -72,17 +72,29 @@ const Stake = () => {
       const poolContract = getPoolContract(signer);
 
       const durationInSeconds = parseInt(duration) * 24 * 60 * 60;
-      const tx = await poolContract.stake(durationInSeconds, {
-        value: ethers.parseEther(stakeAmount),
-        gasLimit: 300000
-      });
+      
+      // Get current gas price
+      const feeData = await provider.getFeeData();
+      console.log('Current gas price:', ethers.formatUnits(feeData.gasPrice || 0, 'gwei'), 'gwei');
 
-      await tx.wait();
+      // Call stake with simpler parameters
+      const tx = await poolContract.stake(
+        durationInSeconds,
+        {
+          value: ethers.parseEther(stakeAmount),
+          gasLimit: 500000  // Increased gas limit
+        }
+      );
+
+      console.log('Stake transaction sent:', tx.hash);
+      const receipt = await tx.wait();
+      console.log('Stake transaction confirmed:', receipt);
+
       window.location.reload();
 
     } catch (error) {
       console.error("Failed to stake:", error);
-      alert("Failed to stake: " + error.message);
+      alert("Failed to stake. Please try again.");
     } finally {
       setLoading(false);
     }

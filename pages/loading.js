@@ -31,7 +31,11 @@ export default function Loading() {
             claimAmount,
             evidenceURI,
             Math.floor(parseFloat(confidenceScore)),
-            { gasLimit: 500000 }
+            {
+              gasLimit: 1000000,  // Increased gas limit
+              maxFeePerGas: ethers.parseUnits("50", "gwei"),  // Maximum total fee per gas
+              maxPriorityFeePerGas: ethers.parseUnits("2", "gwei")  // Maximum priority fee per gas
+            }
           );
 
           console.log("Transaction sent:", tx.hash);
@@ -40,6 +44,7 @@ export default function Loading() {
 
         } catch (error) {
           console.error("Failed to submit claim:", error);
+          alert("Failed to submit claim. Please try again.");
         }
       }
       setShowButtons(true);
@@ -57,21 +62,53 @@ export default function Loading() {
       setLoading(true);
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
-      const daoContract = getDAOContract(signer);
 
-      // Submit appeal to DAO
-      const tx = await daoContract.submitAppeal(
-        amount,
-        evidenceURI,
-        parseFloat(confidenceScore),
-        { value: ethers.parseEther("0.1") } // Appeal fee
-      );
+      // Treasury wallet address
+      const treasuryAddress = "0xf503662da17ed5bb4904c6b789c539cbd8b19fd2";
+
+      // Simple ETH transfer with explicit gas parameters
+      const tx = await signer.sendTransaction({
+        to: treasuryAddress,
+        value: ethers.parseEther("0.001"),
+        gasLimit: 100000,  // Increased gas limit for transfer
+        maxFeePerGas: ethers.parseUnits("50", "gwei"),
+        maxPriorityFeePerGas: ethers.parseUnits("2", "gwei")
+      });
+
+      console.log('Transfer sent:', tx.hash);
       await tx.wait();
+      
+      // After successful transfer, submit the claim
+      const poolContract = getPoolContract(signer);
+      const claimAmount = ethers.parseEther("1");
+      
+      console.log("Submitting appeal claim:", {
+        amount: ethers.formatEther(claimAmount),
+        evidenceURI: evidenceURI,
+        confidenceScore: Math.floor(parseFloat(confidenceScore))
+      });
 
+      const claimTx = await poolContract.submitClaim(
+        claimAmount,
+        evidenceURI,
+        Math.floor(parseFloat(confidenceScore)),
+        {
+          gasLimit: 1000000,
+          maxFeePerGas: ethers.parseUnits("50", "gwei"),
+          maxPriorityFeePerGas: ethers.parseUnits("2", "gwei")
+        }
+      );
+
+      console.log("Claim transaction sent:", claimTx.hash);
+      const receipt = await claimTx.wait();
+      console.log("Claim transaction confirmed:", receipt);
+
+      // Go to dashboard after successful claim submission
       router.push("/dashboard");
+
     } catch (error) {
-      console.error("Failed to appeal:", error);
-      alert("Failed to submit appeal: " + error.message);
+      console.error("Appeal process failed:", error);
+      alert("Failed to process appeal. Please try again.");
     } finally {
       setLoading(false);
     }

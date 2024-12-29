@@ -138,15 +138,27 @@ export default function BuyInsurance() {
           : plan.monthlyPremium.toString()
       );
 
-      // Call the payPremium function
-      const tx = await poolContract.payPremium(plan.id - 1, { value: premiumAmount });
+      // Call the payPremium function with explicit gas parameters
+      const tx = await poolContract.payPremium(
+        plan.id - 1, 
+        { 
+          value: premiumAmount,
+          gasLimit: 1000000,
+          maxFeePerGas: ethers.parseUnits("50", "gwei"),
+          maxPriorityFeePerGas: ethers.parseUnits("2", "gwei")
+        }
+      );
+
+      console.log("Transaction sent:", tx.hash);
       await tx.wait();
+      console.log("Transaction confirmed");
 
       // Update user coverage
       fetchUserCoverage();
       setSuccess(`Successfully purchased ${plan.name}.`);
     } catch (err) {
-      setError(err.message || "Transaction failed.");
+      console.error("Purchase failed:", err);
+      setError(err.message || "Transaction failed. Please try again.");
     } finally {
       setLoading(null);
     }
